@@ -1,0 +1,71 @@
+---
+const linkedin = "https://www.linkedin.com/in/thijsdijkman/";
+---
+<html lang="nl">
+  <head>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio</title>
+    <meta name="description" content="Portfolio van Thijs — Software Engineer (Make IT Work) — projecten, homelab en CV." />
+    <style>
+      body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+      .wrap{max-width:980px;margin:0 auto;padding:32px}
+      .hero{padding:28px;border:1px solid #222;border-radius:18px}
+      .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:16px}
+      .card{padding:16px;border:1px solid #333;border-radius:14px}
+      a{color:inherit}
+      .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+      .btn{padding:10px 12px;border:1px solid #333;border-radius:10px;text-decoration:none}
+      .muted{opacity:.8}
+      .tag{display:inline-block;padding:4px 8px;border:1px solid #444;border-radius:999px;font-size:12px;margin-right:8px}
+      .footer{margin-top:28px;opacity:.75;font-size:14px}
+      code{background:#111;color:#eee;padding:2px 6px;border-radius:6px}
+      body{background:#0b0b0f;color:#f2f2f7}
+      .hero,.card{background:#101018}
+      .btn:hover{border-color:#777}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="hero">
+        <div class="tag">MakeIT Work</div>
+        <div class="tag">Software Engineer track</div>
+        <h1>Portfolio Thijs Dijkman</h1>
+        <p class="muted">
+          Hallo, ik ben Thijs Dijkman en ik richt me op een start als <strong>Software Engineer</strong> via de MakeIT Work opleiding. Dit portfolio draait op mijn eigen Linux Pi server (headless) en laat zien hoe ik <strong>deploy</strong>, <strong>Docker</strong> gebruik en mijn infrastructuur documenteer. 
+        </p>
+
+        <div class="btns">
+          <a class="btn" href="/cv">📄 CV + QR</a>
+          <a class="btn" href="/homelab">🛠️ Homelab</a>
+          <a class="btn" href="/services">📦 Services</a>
+          <a class="btn" href={linkedin} target="_blank" rel="noreferrer">in LinkedIn</a>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Deployed</h3>
+          <p class="muted">Eigen domein, DNS, port-forwarding, reverse proxy, Docker networking.</p>
+        </div>
+        <div class="card">
+          <h3>Secured</h3>
+          <p class="muted">SSH keys, minimale exposure (alleen 80/443), TLS wildcard cert, Fail2ban, basis hardening.</p>
+        </div>
+        <div class="card">
+          <h3>Built</h3>
+          <p class="muted">Statische site (Astro) en infra als “living documentation”.</p>
+        </div>
+      </div>
+
+      <p class="footer">
+        Benieuwd naar mijn achtergrond? Scan de QR op <a href="/cv">/cv</a>.  
+        Tech: <code>Raspberry Pi</code> + <code>Docker</code> + <code>Nginx Proxy Manager</code> + <code>Let’s Encrypt</code>.
+      </p>
+    </div>
+  </body>
+</html>

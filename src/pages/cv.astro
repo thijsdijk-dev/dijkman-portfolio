@@ -1,0 +1,179 @@
+---
+const name = "Thijs Dijkman";
+const role = "Software Engineer (in opleiding)";
+const cvPdf = "/assets/cv.pdf";
+const qrPng = "/assets/qr-cv.png";
+const publicCvUrl = "https://www.dijkman.dev/assets/cv.pdf";
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CV — {name}</title>
+    <meta name="description" content={`CV van ${name}. Download of scan de QR-code.`} />
+
+    <style>
+      :root{
+        --bg: #0b0f19;
+        --card: rgba(255,255,255,.06);
+        --border: rgba(255,255,255,.12);
+        --text: rgba(255,255,255,.92);
+        --muted: rgba(255,255,255,.70);
+        --shadow: 0 12px 40px rgba(0,0,0,.35);
+        --radius: 18px;
+      }
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        background: radial-gradient(1200px 700px at 20% 10%, rgba(99,102,241,.25), transparent 55%),
+                    radial-gradient(1200px 700px at 80% 20%, rgba(16,185,129,.18), transparent 55%),
+                    var(--bg);
+        color: var(--text);
+      }
+      a{color:inherit}
+      .wrap{max-width:980px;margin:0 auto;padding:28px}
+      .topbar{
+        display:flex; align-items:center; justify-content:space-between;
+        gap:16px; margin-bottom:18px;
+      }
+      .back{
+        display:inline-flex; align-items:center; gap:10px;
+        text-decoration:none; opacity:.9;
+        padding:10px 12px; border-radius:14px;
+        border:1px solid var(--border); background: rgba(255,255,255,.03);
+      }
+      .back:hover{opacity:1}
+      .badge{
+        display:inline-flex; align-items:center; gap:8px;
+        padding:10px 12px; border-radius:999px;
+        border:1px solid var(--border); background: rgba(255,255,255,.03);
+        color: var(--muted);
+        white-space:nowrap;
+      }
+      h1{margin:10px 0 6px;font-size: clamp(28px, 4vw, 40px); letter-spacing:-.02em}
+      .subtitle{margin:0 0 18px;color: var(--muted); line-height:1.6}
+      .grid{
+        display:grid; gap:16px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      .card{
+        border:1px solid var(--border);
+        background: var(--card);
+        border-radius: var(--radius);
+        padding:18px;
+        box-shadow: var(--shadow);
+      }
+      .card h2{margin:0 0 10px;font-size:18px}
+      .muted{color: var(--muted); line-height:1.6; margin:0}
+      .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+      .btn{
+        display:inline-flex; align-items:center; justify-content:center; gap:10px;
+        padding:12px 14px; border-radius:14px;
+        border:1px solid var(--border);
+        background: rgba(255,255,255,.04);
+        text-decoration:none;
+        font-weight:600;
+      }
+      .btn:hover{background: rgba(255,255,255,.07)}
+      .btn.primary{
+        background: rgba(99,102,241,.22);
+        border-color: rgba(99,102,241,.35);
+      }
+      .btn.primary:hover{background: rgba(99,102,241,.30)}
+      .code{
+        margin-top:12px;
+        padding:10px 12px;
+        border-radius: 14px;
+        border: 1px dashed rgba(255,255,255,.18);
+        background: rgba(0,0,0,.20);
+        overflow:auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+        color: rgba(255,255,255,.86);
+        font-size: 13px;
+      }
+      .qrwrap{
+        display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+        margin-top:12px;
+      }
+      .qr{
+        width:220px; height:220px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,.18);
+        background: #fff;
+        padding:10px;
+      }
+      .small{font-size: 13px; color: var(--muted); margin-top:10px}
+      .hint{
+        margin-top:14px;
+        padding:12px 14px;
+        border-radius: 16px;
+        border:1px solid rgba(16,185,129,.30);
+        background: rgba(16,185,129,.10);
+        color: rgba(255,255,255,.86);
+      }
+      .hint strong{color: rgba(255,255,255,.95)}
+    </style>
+  </head>
+
+  <body>
+    <main class="wrap">
+      <div class="topbar">
+        <a class="back" href="/">← Terug</a>
+        <span class="badge">📄 {role}</span>
+      </div>
+
+      <h1>CV — {name}</h1>
+      <p class="subtitle">
+        Download mijn CV als PDF of scan de QR-code. 
+      </p>
+
+      <div class="grid">
+        <section class="card">
+          <h2>CV als PDF</h2>
+          <p class="muted">
+            
+          </p>
+
+          <div class="actions">
+            <a class="btn primary" href={publicCvUrl} target="_blank" rel="noreferrer">👀 Bekijk CV</a>
+	    <a class="btn" href={publicCvUrl} download>⬇️ Download CV</a>
+
+          </div>
+
+          <div class="code">{publicCvUrl}</div>
+
+          <p class="small">
+            
+          </p>
+        </section>
+
+        <section class="card">
+          <h2>QR-code</h2>
+          <p class="muted">
+            
+          </p>
+
+          <div class="qrwrap">
+            <img class="qr" src={qrPng} alt="QR-code naar CV PDF" />
+            <div>
+              <p class="small">
+                
+              </p>
+              <div class="code">{publicCvUrl}</div>
+              <p class="small">
+                
+              </p>
+            </div>
+          </div>
+
+          <div class="hint">
+            
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

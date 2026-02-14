@@ -1,0 +1,25 @@
+---
+---
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About</title>
+  </head>
+  <body>
+    <h1>About</h1>
+<section>
+  <h2>Hoe deze site draait (infra & stappen)</h2>
+  <ul>
+    <li>Domein: dijkman.dev (TransIP) + DNS A-records naar mijn publieke IP</li>
+    <li>Ziggo Connect Box in bridge mode</li>
+    <li>TP-Link Deco als router + port forwarding 80/443 naar de Raspberry Pi</li>
+    <li>Docker op de Pi met containers: Nginx Proxy Manager, portfolio (nginx), Portainer, etc.</li>
+    <li>SSL: Let’s Encrypt wildcard (*.dijkman.dev) via DNS-01 (TransIP)</li>
+    <li>Reverse proxy: NPM routeert subdomeinen naar containers via Docker network</li>
+    <li>Deploy: Astro build → static dist → nginx container</li>
+  </ul>
+</section>
+    <p>Hallo, dit is de about pagina.</p>
+  </body>
+</html>
