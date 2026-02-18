@@ -1,8 +1,8 @@
 ---
-const { title = "", subtitle = "" } = Astro.props;
+const { title } = Astro.props;
 ---
-<section class="card">
-  {title && <h3 style="margin:0 0 6px 0">{title}</h3>}
-  {subtitle && <p class="muted" style="margin:0 0 10px 0">{subtitle}</p>}
+
+<div class="card">
+  {title ? <h3 style="margin:0 0 8px">{title}</h3> : null}
   <slot />
-</section>
+</div>

@@ -1,0 +1,34 @@
+---
+const { title, subtitle, facts = [] } = Astro.props;
+---
+
+<section class="panel hero">
+  <div class="tags">
+    <span class="tag">Homelab</span>
+    <span class="tag">Docs</span>
+  </div>
+
+  <h1>{title}</h1>
+  <p class="muted">{subtitle}</p>
+
+  {facts?.length ? (
+    <div class="facts">
+      {facts.map((f) => (
+        <div class="fact card">
+          <div class="label muted">{f.label}</div>
+          <div class="value">{f.value}</div>
+        </div>
+      ))}
+    </div>
+  ) : null}
+</section>
+
+<style>
+  .hero{ padding: 22px; }
+  h1{ margin: 10px 0 6px; }
+  .tags{ margin-bottom: 8px; }
+  .facts{ margin-top: 14px; display:grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .fact{ padding: 12px; }
+  .label{ font-size: 12px; margin-bottom: 6px; }
+  .value{ font-weight: 600; }
+</style>

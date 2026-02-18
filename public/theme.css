@@ -1,0 +1,69 @@
+:root{
+  /* Backgrounds */
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --panel-2: #f1f3f9;
+
+  /* Text */
+  --text: #121826;
+  --muted: #4b5563;
+
+  /* Borders + shadow */
+  --border: rgba(17, 24, 39, 0.10);
+  --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+
+  /* Accent */
+  --accent: #2563eb;     /* blauw */
+  --accent-2: #0ea5e9;   /* lichtblauw */
+}
+
+/* Global */
+html, body{
+  background: var(--bg);
+  color: var(--text);
+}
+
+a{ color: var(--accent); }
+a:hover{ color: var(--accent-2); }
+
+.container, main{
+  color: var(--text);
+}
+
+/* Cards/sections */
+.card, .panel, section, .box{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+}
+
+/* Subtle separators */
+hr{
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* Buttons */
+.btn, button, .button{
+  background: var(--accent);
+  color: white;
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+.btn:hover, button:hover, .button:hover{
+  background: #1d4ed8;
+}
+
+.btn.secondary, .button.secondary{
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+/* Code/monospace blocks (homelab vibe) */
+pre, code{
+  background: #0b1220;
+  color: #e5e7eb;
+  border-radius: 12px;
+}

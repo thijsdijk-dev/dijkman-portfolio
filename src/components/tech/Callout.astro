@@ -1,6 +1,31 @@
 ---
-const { variant = "default" } = Astro.props; // default | success | warn
+const { kind = "info", title = "Info" } = Astro.props;
+
+const color =
+  kind === "success" ? "var(--success)" :
+  kind === "warning" ? "var(--warning)" :
+  kind === "danger"  ? "var(--danger)"  :
+  "var(--accent)";
 ---
-<div class={`callout ${variant}`}>
-  <slot />
+
+<div class="callout">
+  <div class="bar" style={`background:${color}`}></div>
+  <div class="body">
+    <div class="head">
+      <strong>{title}</strong>
+      <span class="pill" style={`border-color:${color}; color:${color}`}>{kind.toUpperCase()}</span>
+    </div>
+    <div class="content muted">
+      <slot />
+    </div>
+  </div>
 </div>
+
+<style>
+  .callout{ display:grid; grid-template-columns: 6px 1fr; overflow:hidden; border-radius: var(--radius-sm); border: 1px solid var(--border); background: rgba(255,255,255,.03); }
+  .bar{ width: 6px; }
+  .body{ padding: 12px 14px; }
+  .head{ display:flex; align-items:center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .pill{ font-size: 11px; border:1px solid; padding: 2px 8px; border-radius: 999px; }
+  .content{ line-height: 1.5; }
+</style>

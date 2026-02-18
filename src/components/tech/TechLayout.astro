@@ -1,0 +1,64 @@
+---
+const { title = "Tech", toc = [] } = Astro.props;
+---
+
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} — Thijs Dijkman</title>
+
+    <!-- favicons (houd je huidige) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <link rel="stylesheet" href="/theme.css" />
+  </head>
+
+  <body>
+    <main class="container">
+      <nav class="topnav">
+        <a class="btn" href="/">← Home</a>
+      </nav>
+
+      <div class="layout">
+        <aside class="toc panel">
+          <div class="toc-title">Inhoud</div>
+          <ul>
+            {toc.map((item) => (
+              <li><a href={`#${item.id}`}>{item.label}</a></li>
+            ))}
+          </ul>
+        </aside>
+
+        <section class="content">
+          <slot />
+        </section>
+      </div>
+
+      <footer class="footer muted">
+        <hr />
+        <div>Tech docs · “living documentation”</div>
+      </footer>
+    </main>
+
+    <style>
+      .topnav{ margin-bottom: 16px; display:flex; gap:10px; }
+      .layout{ display:grid; gap:14px; grid-template-columns: 280px 1fr; align-items:start; }
+      .toc{ padding: 14px; position: sticky; top: 18px; }
+      .toc-title{ font-weight: 700; margin-bottom: 10px; }
+      .toc ul{ margin:0; padding-left: 18px; }
+      .toc a{ opacity:.9; }
+      .toc a:hover{ opacity:1; text-decoration: underline; }
+      .content{ display:flex; flex-direction: column; gap: 14px; }
+      .footer{ margin-top: 22px; font-size: 14px; }
+
+      @media (max-width: 900px){
+        .layout{ grid-template-columns: 1fr; }
+        .toc{ position: static; }
+      }
+    </style>
+  </body>
+</html>
