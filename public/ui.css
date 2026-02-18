@@ -1,0 +1,30 @@
+/* Layout */
+.wrap{max-width:980px;margin:0 auto;padding:32px}
+.topbar{position:sticky;top:0;background:rgba(11,11,15,.85);backdrop-filter: blur(8px);border-bottom:1px solid rgba(255,255,255,.06);z-index:10}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 32px}
+.brand{color:#f2f2f7;text-decoration:none;font-weight:700}
+.nav{display:flex;gap:14px}
+.nav a{color:rgba(242,242,247,.85);text-decoration:none}
+.nav a:hover{color:#fff}
+
+/* Your existing vibe (dark) – keep it consistent */
+html,body{background:#0b0b0f;color:#f2f2f7}
+.card{background:#101018;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px}
+.hero{background:#101018;border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:28px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:16px}
+.muted{opacity:.8}
+
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;font-size:12px;color:rgba(242,242,247,.9)}
+
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.btn{padding:10px 12px;border:1px solid rgba(255,255,255,.14);border-radius:12px;text-decoration:none;color:inherit;background:transparent}
+.btn:hover{border-color:rgba(255,255,255,.35)}
+
+.callout{margin-top:12px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(16,16,24,.65)}
+.callout.success{border-color:rgba(34,197,94,.35)}
+.callout.success{color:rgba(34,197,94,.95)}
+
+pre,code{background:#0b1220;color:#e5e7eb;border-radius:12px}
+pre{padding:14px;overflow:auto;border:1px solid rgba(255,255,255,.08)}
+code{padding:2px 6px}

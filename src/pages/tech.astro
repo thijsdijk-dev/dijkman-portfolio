@@ -1,0 +1,98 @@
+---
+import Base from "../layouts/Base.astro";
+import Card from "../components/Card.astro";
+import Badge from "../components/Badge.astro";
+import Callout from "../components/Callout.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+
+const stack = [
+  "Raspberry Pi (Debian)",
+  "Docker",
+  "Nginx Proxy Manager",
+  "Let’s Encrypt (DNS-01 via TransIP)",
+  "GitHub Actions",
+  "Port forwarding (Deco) + Ziggo",
+];
+---
+<Base
+  title="Tech — dijkman.dev"
+  description="Infra, deploy en security: hoe dijkman.dev draait op een Raspberry Pi met Docker, NPM, Let's Encrypt en CI/CD."
+>
+  <section class="hero">
+    <div class="badges">
+      {stack.map((s) => <Badge text={s} />)}
+    </div>
+    <h1 style="margin:0 0 10px 0">Tech / Homelab</h1>
+    <p class="muted" style="margin:0">
+      Deze pagina is mijn “living documentation”: architectuur, keuzes, security en CI/CD.
+    </p>
+    <Callout variant="success">✅ Live deploy via GitHub Actions → build → upload dist → Nginx serve → NPM reverse proxy</Callout>
+  </section>
+
+  <div class="grid">
+    <Card title="1) Architectuur" subtitle="Hoe verkeer binnenkomt en waar het eindigt">
+      <ul>
+        <li>Internet → Ziggo modem (bridge) → Deco router (NAT)</li>
+        <li>Poorten open: <code>80</code> en <code>443</code> naar Raspberry Pi</li>
+        <li>Nginx Proxy Manager (container) routeert naar services op Docker network</li>
+        <li>Portfolio site = Nginx container met <code>dist/</code> gemount</li>
+      </ul>
+    </Card>
+
+    <Card title="2) DNS & TLS" subtitle="Waarom DNS-01 + wildcard logisch is voor homelab">
+      <ul>
+        <li>TransIP DNS A-records: <code>dijkman.dev</code> en <code>www</code></li>
+        <li>Let’s Encrypt via DNS-01 (werkt zonder open poort 80 tijdens challenge)</li>
+        <li>Wildcard cert voor <code>*.dijkman.dev</code> + apex <code>dijkman.dev</code></li>
+        <li>Redirect: <code>www → dijkman.dev</code></li>
+      </ul>
+    </Card>
+
+    <Card title="3) CI/CD" subtitle="Van commit → live zonder handwerk">
+      <ol>
+        <li>Push naar main</li>
+        <li>GitHub Actions draait <code>astro build</code></li>
+        <li>Artifacts (dist) worden naar de Pi gesynct</li>
+        <li>Container serve’t nieuwe bestanden (zonder rebuild)</li>
+      </ol>
+    </Card>
+
+    <Card title="4) Security basics" subtitle="Pragmatische hardening (niet overdreven, wel netjes)">
+      <ul>
+        <li>Minimale exposure: alleen <code>80/443</code> publiek; SSH beperkt</li>
+        <li>SSH keys (geen password login)</li>
+        <li>Fail2ban / brute-force mitigatie (optioneel: benoem wat jij gebruikt)</li>
+        <li>Backups/restore plan (minimaal: config + data + repo)</li>
+      </ul>
+    </Card>
+  </div>
+
+  <section style="margin-top:16px">
+    <Card title="5) Commands & bewijs" subtitle="Snippets die laten zien dat het echt draait">
+      <CodeBlock title="Docker containers (voorbeeld)">
+docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}"
+      </CodeBlock>
+
+      <CodeBlock title="Healthcheck (voorbeeld)">
+curl -I https://dijkman.dev/
+curl -I https://dijkman.dev/about/
+      </CodeBlock>
+
+      <CodeBlock title="NPM upstream check (voorbeeld)">
+docker exec -it npm curl -I http://portfolio:80/
+      </CodeBlock>
+    </Card>
+  </section>
+
+  <section style="margin-top:16px">
+    <Card title="6) Roadmap" subtitle="Concrete volgende uitbreidingen (met impact)">
+      <ol>
+        <li><strong>Statuspagina</strong> (uptime checks + incident log)</li>
+        <li><strong>Security header set</strong> (HSTS, CSP light, X-Frame-Options)</li>
+        <li><strong>Observability</strong> (basic logs + grafiekjes: CPU/RAM/disk)</li>
+        <li><strong>Backup & restore</strong> gedocumenteerd + test restore</li>
+        <li><strong>Projects</strong>: 2–3 mini cases met screenshots en repo-links</li>
+      </ol>
+    </Card>
+  </section>
+</Base>

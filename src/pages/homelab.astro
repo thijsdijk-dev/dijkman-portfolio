@@ -1,60 +1,194 @@
-<html lang="nl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Homelab — Thijs Dijkman</title>
-    <style>
-      body{margin:0;font-family:ui-sans-serif,system-ui;background:#0b0b0f;color:#f2f2f7}
-      .wrap{max-width:980px;margin:0 auto;padding:32px}
-      .box{padding:18px;border:1px solid #333;border-radius:14px;background:#101018}
-      a{color:inherit}
-      code,pre{background:#111;color:#eee;border-radius:10px}
-      code{padding:2px 6px}
-      pre{padding:14px;overflow:auto}
-      ul{line-height:1.7}
-      .nav{margin-bottom:16px;opacity:.85}
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <div class="nav"><a href="/">← Home</a></div>
-      <h1>Homelab</h1>
+---
+import TechLayout from "../components/tech/TechLayout.astro";
+import Hero from "../components/tech/Hero.astro";
+import StatGrid from "../components/tech/StatGrid.astro";
+import Section from "../components/tech/Section.astro";
+import Card from "../components/tech/Card.astro";
+import Callout from "../components/tech/Callout.astro";
+import Steps from "../components/tech/Steps.astro";
+import Roadmap from "../components/tech/Roadmap.astro";
+import Diagram from "../components/tech/Diagram.astro";
 
-      <div class="box">
-        <h3>Architectuur</h3>
-        <pre>
-Internet
-  ↓ (Public IPv4)
-Ziggo modem (bridge)
-  ↓
-TP-Link Deco (router, NAT + port forward 80/443)
-  ↓
-Raspberry Pi (Docker)
-  ├─ Nginx Proxy Manager (TLS / reverse proxy)
-  └─ Containers (whoami, portfolio, etc.)
-        </pre>
-        <p>Principes: <strong>least exposure</strong> (alleen 80/443), services intern via Docker network, publiek via NPM.</p>
-      </div>
+const toc = [
+  { id: "overview", label: "Overzicht" },
+  { id: "network", label: "Netwerk & routing" },
+  { id: "docker", label: "Docker & containers" },
+  { id: "reverse-proxy", label: "Reverse proxy & TLS" },
+  { id: "deploy", label: "CI/CD deploy" },
+  { id: "security", label: "Security" },
+  { id: "ops", label: "Beheer & monitoring" },
+  { id: "roadmap", label: "Roadmap" },
+];
 
-      <div class="box" style="margin-top:14px">
-        <h3>Stack</h3>
+const hero = {
+  title: "Homelab",
+  subtitle:
+    "Self-hosted Raspberry Pi homelab: Docker services, reverse proxy, DNS-01 TLS en automatische deploy.",
+  facts: [
+    { label: "Host", value: "Raspberry Pi · Debian (ARM64)" },
+    { label: "Ingress", value: "80/443 → Nginx Proxy Manager" },
+    { label: "DNS", value: "TransIP (A/CNAME + DNS-01 challenges)" },
+    { label: "Deploy", value: "GitHub Actions → SSH → update dist" },
+  ],
+};
+
+const stats = [
+  { label: "Publieke poorten", value: "80 + 443" },
+  { label: "Reverse proxy", value: "NPM (openresty/nginx)" },
+  { label: "Portfolio container", value: "nginx:alpine (static dist)" },
+  { label: "Certs", value: "Let’s Encrypt (DNS-01)" },
+];
+---
+
+<TechLayout title="Homelab" toc={toc}>
+  <Hero title={hero.title} subtitle={hero.subtitle} facts={hero.facts} />
+
+  <StatGrid items={stats} />
+
+  <Section id="overview" title="Overzicht">
+    <Card>
+      <p>
+        Mijn website draait op een eigen Raspberry Pi server. Publieke traffic komt binnen op <code>80/443</code>,
+        wordt door Nginx Proxy Manager gerouteerd naar interne containers, en TLS wordt afgehandeld met Let’s Encrypt
+        via <strong>DNS-01</strong> (TransIP).
+      </p>
+    </Card>
+
+    <Callout kind="success" title="Status">
+      De site is extern bereikbaar en subpagina’s werken via static routing (index.html per route).
+    </Callout>
+  </Section>
+
+  <Section id="network" title="Netwerk & routing">
+    <Diagram
+      title="Traffic flow"
+      content={`Browser → DNS (TransIP) → Public IP (Ziggo) → Router port forward (80/443) → RPi (Docker) → NPM → portfolio container`}
+    />
+
+    <div class="grid">
+      <Card title="DNS records">
         <ul>
-          <li><code>Docker</code> voor containerized services</li>
-          <li><code>Nginx Proxy Manager</code> voor reverse proxy + Let’s Encrypt wildcard</li>
-          <li><code>Portainer</code> voor container beheer (intern)</li>
+          <li><code>A</code> record: <code>dijkman.dev → &lt;public IP&gt;</code></li>
+          <li><code>CNAME</code> record: <code>www → dijkman.dev</code> (optioneel)</li>
         </ul>
-      </div>
+      </Card>
 
-      <div class="box" style="margin-top:14px">
-        <h3>Security highlights</h3>
+      <Card title="Port forwarding">
         <ul>
-          <li>SSH: public key auth</li>
-          <li>Router: alleen TCP 80/443 naar NPM</li>
-          <li>TLS: wildcard cert <code>*.dijkman.dev</code></li>
-          <li>Hardening: security headers op proxy hosts</li>
-          <li>Roadmap: access lists, Cloudflare, monitoring + backups</li>
+          <li>Forward <code>TCP 80</code> → Raspberry Pi LAN IP</li>
+          <li>Forward <code>TCP 443</code> → Raspberry Pi LAN IP</li>
         </ul>
-      </div>
+      </Card>
     </div>
-  </body>
-</html>
+  </Section>
+
+  <Section id="docker" title="Docker & containers">
+    <div class="grid">
+      <Card title="Core containers">
+        <ul>
+          <li><strong>Nginx Proxy Manager</strong> (ingress + TLS)</li>
+          <li><strong>portfolio</strong> (nginx static: dist)</li>
+          <li><strong>portainer</strong> (beheer)</li>
+          <li><strong>whoami</strong> (debug / connectivity test)</li>
+        </ul>
+      </Card>
+
+      <Card title="Netwerk model">
+        <p>
+          Containers hangen op een gedeeld docker network (<code>proxy</code>) zodat NPM intern kan routen
+          naar <code>portfolio:80</code> zonder host-ports open te zetten.
+        </p>
+      </Card>
+    </div>
+
+    <Callout kind="info" title="Waarom static nginx container?">
+      Astro build output is een <code>dist</code> map → snel, simpel, weinig attack surface.
+    </Callout>
+  </Section>
+
+  <Section id="reverse-proxy" title="Reverse proxy & TLS">
+    <Steps
+      title="Wat er draait"
+      items={[
+        "NPM luistert op 80/443 op de host (docker-proxy)",
+        "Proxy host rule: dijkman.dev → portfolio:80",
+        "Let’s Encrypt DNS-01 via TransIP plugin",
+        "www redirect: www.dijkman.dev → dijkman.dev (optioneel via host/redirect rule)",
+      ]}
+    />
+
+    <Callout kind="warning" title="Let’s Encrypt rate limits">
+      Als je veel certs aanvraagt/verwijdert, kun je tijdelijk geblokkeerd worden. Gebruik liever één certificaat voor apex + wildcard.
+    </Callout>
+  </Section>
+
+  <Section id="deploy" title="CI/CD deploy">
+    <Card title="Deploy-strategie (simpel & robuust)">
+      <ol>
+        <li>Build Astro op je PC (of in GitHub Actions)</li>
+        <li>Upload <code>dist/</code> naar de Pi (scp/rsync)</li>
+        <li>Fix permissions (directories 755, files 644)</li>
+        <li>Restart (of reload) portfolio container</li>
+      </ol>
+    </Card>
+
+    <Callout kind="info" title="Jij hebt dit al bewezen in de praktijk">
+      Je 403 kwam door permissies/mount-path; na chmod + juiste mount werkte routing weer.
+    </Callout>
+  </Section>
+
+  <Section id="security" title="Security">
+    <div class="grid">
+      <Card title="Ingress beperken">
+        Alleen 80/443 publiek. Services blijven intern achter de reverse proxy.
+      </Card>
+      <Card title="SSH key-only">
+        GitHub Actions deploy key is separaat, beperkt en zonder password login.
+      </Card>
+      <Card title="TLS correctheid">
+        Cert SAN moet matchen met hostnames (apex + eventueel wildcard).
+      </Card>
+      <Card title="Hardening ideeën">
+        Fail2ban, SSH rate limiting, automatische updates, backups.
+      </Card>
+    </div>
+  </Section>
+
+  <Section id="ops" title="Beheer & monitoring">
+    <div class="grid">
+      <Card title="Logging">
+        NPM logs + container logs → troubleshooting (403/404/SSL).
+      </Card>
+      <Card title="Monitoring (next)">
+        Uptime Kuma voor endpoint checks en notificaties.
+      </Card>
+      <Card title="Backups (next)">
+        Backup NPM data + site dist + compose files.
+      </Card>
+      <Card title="Documentatie">
+        “Living documentation” op deze pagina: wat draait, waarom, hoe.
+      </Card>
+    </div>
+  </Section>
+
+  <Section id="roadmap" title="Roadmap">
+    <Roadmap
+      items={[
+        { text: "Uptime Kuma toevoegen + status badge op /homelab", done: false },
+        { text: "Backups: NPM data + dist + compose naar externe storage", done: false },
+        { text: "Fail2ban + sshd hardening + firewall (ufw) baseline", done: false },
+        { text: "Infra repo: docker-compose.yml + README met recovery steps", done: false },
+      ]}
+    />
+  </Section>
+</TechLayout>
+
+<style>
+  .grid{
+    display:grid;
+    gap:14px;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  }
+  ul{ margin:0; padding-left:18px; }
+  code{ padding:2px 6px; border-radius:8px; background:#111; }
+</style>

@@ -1,0 +1,6 @@
+---
+const { variant = "default" } = Astro.props; // default | success | warn
+---
+<div class={`callout ${variant}`}>
+  <slot />
+</div>
