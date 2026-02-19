@@ -1,9 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
-import Card from "../components/Card.astro";
-import Badge from "../components/Badge.astro";
-import Callout from "../components/Callout.astro";
-import CodeBlock from "../components/CodeBlock.astro";
+import Card from "../components/tech/Card.astro";
+import Badge from "../components/tech/Badge.astro";
+import Callout from "../components/tech/Callout.astro";
+import CodeBlock from "../components/tech/CodeBlock.astro";
 
 const stack = [
   "Raspberry Pi (Debian)",
@@ -69,20 +69,23 @@ const stack = [
 
   <section style="margin-top:16px">
     <Card title="5) Commands & bewijs" subtitle="Snippets die laten zien dat het echt draait">
-      <CodeBlock title="Docker containers (voorbeeld)">
-docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}"
-      </CodeBlock>
+      <CodeBlock
+  title="Docker containers (voorbeeld)"
+  code={`docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}"`}
+/>
+
+
 
       <CodeBlock title="Healthcheck (voorbeeld)">
 curl -I https://dijkman.dev/
 curl -I https://dijkman.dev/about/
       </CodeBlock>
 
-      <CodeBlock title="NPM upstream check (voorbeeld)">
-docker exec -it npm curl -I http://portfolio:80/
-      </CodeBlock>
-    </Card>
-  </section>
+      <CodeBlock
+  title="NPM upstream check (voorbeeld)"
+  code={`docker exec -it npm curl -I http://portfolio:80/`}
+/>
+
 
   <section style="margin-top:16px">
     <Card title="6) Roadmap" subtitle="Concrete volgende uitbreidingen (met impact)">
