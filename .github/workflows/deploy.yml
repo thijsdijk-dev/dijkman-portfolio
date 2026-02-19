@@ -2,12 +2,11 @@ name: Deploy to Pi
 
 on:
   push:
-    branches: ["master"]
+    branches: [ "master" ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,35 +23,12 @@ jobs:
       - name: Build Astro
         run: npm run build
 
-      # Zorg dat de target folder bestaat (en permissions OK zijn)
-      - name: Prepare target dir on Pi
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            mkdir -p /home/naruto/dijkman-portfolio/dist
-            chmod 755 /home/naruto/dijkman-portfolio
-            chmod 755 /home/naruto/dijkman-portfolio/dist
-
-      - name: Deploy dist to Raspberry Pi
+      - name: Deploy to Raspberry Pi
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/*"
-          target: "/home/naruto/dijkman-portfolio/dist/"
+          source: "dist/**"
+          target: "/home/naruto/dijkman-portfolio/dist"
           strip_components: 1
-
-      # Fix permissies zodat nginx niet weer 403 gaat doen
-      - name: Fix permissions on Pi
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            sudo find /home/naruto/dijkman-portfolio/dist -type d -exec chmod 755 {} \;
-            sudo find /home/naruto/dijkman-portfolio/dist -type f -exec chmod 644 {} \;
