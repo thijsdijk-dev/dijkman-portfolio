@@ -2,33 +2,53 @@
 const { title, subtitle, facts = [] } = Astro.props;
 ---
 
-<section class="panel hero">
-  <div class="tags">
-    <span class="tag">Homelab</span>
-    <span class="tag">Docs</span>
-  </div>
-
+<section class="hero">
+  <div class="kicker">Homelab / Tech</div>
   <h1>{title}</h1>
   <p class="muted">{subtitle}</p>
 
-  {facts?.length ? (
-    <div class="facts">
-      {facts.map((f) => (
-        <div class="fact card">
-          <div class="label muted">{f.label}</div>
-          <div class="value">{f.value}</div>
-        </div>
-      ))}
-    </div>
-  ) : null}
+  <div class="facts">
+    {facts.map((f) => (
+      <div class="fact">
+        <div class="label">{f.label}</div>
+        <div class="value">{f.value}</div>
+      </div>
+    ))}
+  </div>
 </section>
 
 <style>
-  .hero{ padding: 22px; }
-  h1{ margin: 10px 0 6px; }
-  .tags{ margin-bottom: 8px; }
-  .facts{ margin-top: 14px; display:grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-  .fact{ padding: 12px; }
-  .label{ font-size: 12px; margin-bottom: 6px; }
-  .value{ font-weight: 600; }
+  .hero{
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: 22px;
+    box-shadow: var(--shadow);
+  }
+  .kicker{
+    display:inline-block;
+    font-size:12px;
+    opacity:.75;
+    border:1px solid var(--border-2);
+    border-radius:999px;
+    padding:4px 10px;
+    margin-bottom: 12px;
+  }
+  h1{ margin: 0 0 8px 0; font-size: 32px; }
+  .muted{ margin: 0; color: var(--muted); }
+
+  .facts{
+    margin-top: 14px;
+    display:grid;
+    gap:10px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .fact{
+    border:1px solid rgba(255,255,255,.08);
+    border-radius: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,.03);
+  }
+  .label{ font-size:12px; opacity:.75; }
+  .value{ margin-top: 4px; font-weight: 600; }
 </style>

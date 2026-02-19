@@ -1,64 +1,75 @@
 ---
-const { title = "Tech", toc = [] } = Astro.props;
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const {
+  title = "Tech",
+  toc = [],
+} = Astro.props;
 ---
 
-<html lang="nl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title} — Thijs Dijkman</title>
+<BaseLayout title={`${title} — Thijs Dijkman`}>
+  <div class="wrap">
+    <header class="topbar">
+      <a class="back" href="/">← Home</a>
+      <div class="spacer"></div>
+      <a class="pill" href="/services">Services</a>
+      <a class="pill" href="/homelab">Homelab</a>
+      <a class="pill" href="/cv">CV</a>
+    </header>
 
-    <!-- favicons (houd je huidige) -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" href="/favicon.ico" />
+    <div class="layout">
+      <aside class="toc">
+        <div class="tocTitle">Inhoud</div>
+        <nav>
+          {toc.map((item) => (
+            <a href={`#${item.id}`}>{item.label}</a>
+          ))}
+        </nav>
+      </aside>
 
-    <link rel="stylesheet" href="/theme.css" />
-  </head>
+      <main class="main">
+        <slot />
+      </main>
+    </div>
+  </div>
+</BaseLayout>
 
-  <body>
-    <main class="container">
-      <nav class="topnav">
-        <a class="btn" href="/">← Home</a>
-      </nav>
+<style>
+  .wrap{ max-width: 1100px; margin: 0 auto; padding: 28px; }
+  .topbar{ display:flex; align-items:center; gap:10px; margin-bottom: 18px; }
+  .spacer{ flex:1; }
+  .back{ opacity:.85; text-decoration:none; }
+  .pill{
+    text-decoration:none;
+    border:1px solid var(--border-2);
+    background: var(--panel);
+    padding: 8px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+  }
 
-      <div class="layout">
-        <aside class="toc panel">
-          <div class="toc-title">Inhoud</div>
-          <ul>
-            {toc.map((item) => (
-              <li><a href={`#${item.id}`}>{item.label}</a></li>
-            ))}
-          </ul>
-        </aside>
+  .layout{ display:grid; grid-template-columns: 240px 1fr; gap: 18px; }
+  .toc{
+    position: sticky;
+    top: 18px;
+    align-self: start;
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: 14px;
+  }
+  .tocTitle{ font-size: 12px; opacity:.75; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .08em; }
+  .toc a{
+    display:block;
+    padding: 8px 10px;
+    border-radius: 10px;
+    text-decoration:none;
+    opacity:.9;
+  }
+  .toc a:hover{ background: rgba(255,255,255,.04); }
 
-        <section class="content">
-          <slot />
-        </section>
-      </div>
-
-      <footer class="footer muted">
-        <hr />
-        <div>Tech docs · “living documentation”</div>
-      </footer>
-    </main>
-
-    <style>
-      .topnav{ margin-bottom: 16px; display:flex; gap:10px; }
-      .layout{ display:grid; gap:14px; grid-template-columns: 280px 1fr; align-items:start; }
-      .toc{ padding: 14px; position: sticky; top: 18px; }
-      .toc-title{ font-weight: 700; margin-bottom: 10px; }
-      .toc ul{ margin:0; padding-left: 18px; }
-      .toc a{ opacity:.9; }
-      .toc a:hover{ opacity:1; text-decoration: underline; }
-      .content{ display:flex; flex-direction: column; gap: 14px; }
-      .footer{ margin-top: 22px; font-size: 14px; }
-
-      @media (max-width: 900px){
-        .layout{ grid-template-columns: 1fr; }
-        .toc{ position: static; }
-      }
-    </style>
-  </body>
-</html>
+  @media (max-width: 900px){
+    .layout{ grid-template-columns: 1fr; }
+    .toc{ position: static; }
+  }
+</style>

@@ -3,16 +3,18 @@ const { id, title } = Astro.props;
 ---
 
 <section id={id} class="section">
-  <div class="section-head">
-    <h2>{title}</h2>
-    <a class="anchor muted" href={`#${id}`}>#</a>
+  <h2>{title}</h2>
+  <div class="content">
+    <slot />
   </div>
-  <slot />
 </section>
 
 <style>
-  .section{ display:flex; flex-direction:column; gap: 12px; }
-  .section-head{ display:flex; align-items: baseline; gap: 10px; }
-  h2{ margin: 0; }
-  .anchor{ font-size: 14px; }
+  .section{ margin-top: 22px; }
+  h2{
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    letter-spacing: .01em;
+  }
+  .content{ display: grid; gap: 12px; }
 </style>

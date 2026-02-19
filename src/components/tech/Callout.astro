@@ -1,31 +1,25 @@
 ---
-const { kind = "info", title = "Info" } = Astro.props;
+const { kind = "info", title = "" } = Astro.props;
 
-const color =
-  kind === "success" ? "var(--success)" :
-  kind === "warning" ? "var(--warning)" :
-  kind === "danger"  ? "var(--danger)"  :
-  "var(--accent)";
+const tone = {
+  success: "border-color: rgba(52,211,153,.45); background: rgba(52,211,153,.06);",
+  info: "border-color: rgba(125,211,252,.45); background: rgba(125,211,252,.06);",
+  warning: "border-color: rgba(251,191,36,.45); background: rgba(251,191,36,.06);",
+  danger: "border-color: rgba(251,113,133,.45); background: rgba(251,113,133,.06);",
+}[kind] || "border-color: rgba(125,211,252,.45); background: rgba(125,211,252,.06);";
 ---
 
-<div class="callout">
-  <div class="bar" style={`background:${color}`}></div>
-  <div class="body">
-    <div class="head">
-      <strong>{title}</strong>
-      <span class="pill" style={`border-color:${color}; color:${color}`}>{kind.toUpperCase()}</span>
-    </div>
-    <div class="content muted">
-      <slot />
-    </div>
-  </div>
+<div class="callout" style={tone}>
+  {title && <div class="title">{title}</div>}
+  <div class="body"><slot /></div>
 </div>
 
 <style>
-  .callout{ display:grid; grid-template-columns: 6px 1fr; overflow:hidden; border-radius: var(--radius-sm); border: 1px solid var(--border); background: rgba(255,255,255,.03); }
-  .bar{ width: 6px; }
-  .body{ padding: 12px 14px; }
-  .head{ display:flex; align-items:center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
-  .pill{ font-size: 11px; border:1px solid; padding: 2px 8px; border-radius: 999px; }
-  .content{ line-height: 1.5; }
+  .callout{
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .title{ font-weight: 800; margin-bottom: 6px; }
+  .body{ color: var(--muted); }
 </style>

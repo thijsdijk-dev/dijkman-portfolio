@@ -1,15 +1,22 @@
 ---
-const { title = "Stappen", items = [] } = Astro.props;
+const { title = "", items = [] } = Astro.props;
 ---
 
-<div class="card">
-  <h3 style="margin:0 0 10px">{title}</h3>
-  <ol class="steps">
-    {items.map((it) => <li>{it}</li>)}
+<div class="steps">
+  {title && <div class="title">{title}</div>}
+  <ol>
+    {items.map((x) => <li>{x}</li>)}
   </ol>
 </div>
 
 <style>
-  .steps{ margin:0; padding-left: 18px; }
-  .steps li{ margin: 6px 0; }
+  .steps{
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: 14px 16px;
+  }
+  .title{ font-weight: 800; margin-bottom: 8px; }
+  ol{ margin: 0; padding-left: 18px; color: var(--muted); }
+  li{ margin: 6px 0; }
 </style>

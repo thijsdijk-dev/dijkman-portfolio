@@ -2,25 +2,44 @@
 const { items = [] } = Astro.props;
 ---
 
-<div class="card">
-  <h3 style="margin:0 0 10px">Roadmap</h3>
-  <ul class="list">
-    {items.map((it) => (
-      <li>
-        <span class={`dot ${it.done ? "done" : ""}`}></span>
-        <span class={it.done ? "muted" : ""}>{it.text}</span>
-      </li>
-    ))}
-  </ul>
+<div class="roadmap">
+  {items.map((i) => (
+    <div class={`row ${i.done ? "done" : ""}`}>
+      <span class="dot"></span>
+      <span class="text">{i.text}</span>
+      <span class="state">{i.done ? "Done" : "Next"}</span>
+    </div>
+  ))}
 </div>
 
 <style>
-  .list{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap: 10px; }
-  li{ display:flex; align-items:flex-start; gap: 10px; }
+  .roadmap{
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: 10px;
+  }
+  .row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding: 10px 10px;
+    border-radius: 14px;
+  }
+  .row:hover{ background: rgba(255,255,255,.03); }
+
   .dot{
     width: 10px; height: 10px; border-radius: 999px;
-    border: 2px solid var(--border);
-    margin-top: 4px;
+    background: var(--warn);
   }
-  .dot.done{ border-color: var(--success); background: rgba(34,197,94,.25); }
+  .done .dot{ background: var(--ok); }
+
+  .text{ flex: 1; color: var(--muted); }
+  .state{
+    font-size: 12px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius: 999px;
+    padding: 4px 8px;
+    opacity: .85;
+  }
 </style>

@@ -1,8 +1,18 @@
 ---
-const { title = "Diagram", content = "" } = Astro.props;
+const { title = "", content = "" } = Astro.props;
 ---
 
-<div class="card">
-  <h3 style="margin:0 0 10px">{title}</h3>
+<div class="diagram">
+  {title && <div class="title">{title}</div>}
   <pre><code>{content}</code></pre>
 </div>
+
+<style>
+  .diagram{
+    border:1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: 14px 16px;
+  }
+  .title{ font-weight: 800; margin-bottom: 10px; }
+</style>
