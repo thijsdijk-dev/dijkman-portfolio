@@ -161,8 +161,20 @@ const stats = [
       <Card title="Logging">
         NPM logs + container logs → troubleshooting (403/404/SSL).
       </Card>
-      <Card title="Monitoring (next)">
-        Uptime Kuma voor endpoint checks en notificaties.
+      <Card title="Monitoring (Uptime Kuma)">
+        <p>
+          Externe uptime checks en notificaties draaien nu via Uptime Kuma op
+          <a href="https://status.dijkman.dev/" target="_blank" rel="noreferrer">status.dijkman.dev</a>.
+        </p>
+        <p>
+          <a href="https://status.dijkman.dev/" target="_blank" rel="noreferrer">
+            <img
+              src="https://status.dijkman.dev/api/badge/1/status?upColor=%2344cc11&downColor=%23ff3366&pendingColor=%23ffaa00&maintenanceColor=%238ea6ff"
+              alt="Uptime Kuma status badge"
+              loading="lazy"
+            />
+          </a>
+        </p>
       </Card>
       <Card title="Backups (next)">
         Backup NPM data + site dist + compose files.
@@ -176,7 +188,7 @@ const stats = [
   <Section id="roadmap" title="Roadmap">
     <Roadmap
       items={[
-        { text: "Uptime Kuma toevoegen + status badge op /homelab", done: false },
+        { text: "Uptime Kuma toegevoegd + status badge op /homelab", done: true },
         { text: "Backups: NPM data + dist + compose naar externe storage", done: false },
         { text: "Fail2ban + sshd hardening + firewall (ufw) baseline", done: false },
         { text: "Infra repo: docker-compose.yml + README met recovery steps", done: false },
