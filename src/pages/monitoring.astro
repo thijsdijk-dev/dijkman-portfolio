@@ -61,7 +61,7 @@ const grafanaUrl =
       <h1>Serverstats & Monitoring Dashboard</h1>
       <p class="subtitle">
         Dit dashboard is de basis voor mijn monitoring-pagina: snelle health checks, uptime-overzicht en kerncijfers van mijn Raspberry Pi server.
-        Live host-metrics bekijk ik in Grafana, met Prometheus als datasource en notificaties via Uptime Kuma.
+        Live host-metrics bekijk ik in Grafana, met Prometheus als datasource en endpoint checks/notificaties via Uptime Kuma.
       </p>
 
       <div class="grid">
@@ -125,6 +125,7 @@ const grafanaUrl =
           <li><strong>Prometheus</strong> voor scraping en retentie van metrics.</li>
           <li><strong>Grafana</strong> voor visualisaties en alerts.</li>
           <li><strong>Uptime Kuma</strong> voor endpoint checks en notificaties (mail/Discord/Telegram).</li>
+          <li><strong>Healthchecks.io</strong> voor een dagelijkse nachtelijke ping (1x per dag) als extra heartbeat.</li>
         </ul>
       </section>
 
