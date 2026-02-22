@@ -8,7 +8,6 @@ const services = [
 
 const grafanaUrl =
   'https://grafana.dijkman.dev/d/rYdddlPWk/node-exporter-full?orgId=1&from=now-24h&to=now&timezone=browser&var-ds_prometheus=afe0mp0pozbb4f&var-job=node&var-nodename=c8f06e34739f&var-node=node-exporter:9100&refresh=1m';
-const healthchecksUrl = 'https://healthchecks.io/';
 ---
 
 <html lang="nl">
@@ -62,7 +61,7 @@ const healthchecksUrl = 'https://healthchecks.io/';
       <h1>Serverstats & Monitoring Dashboard</h1>
       <p class="subtitle">
         Dit dashboard is de basis voor mijn monitoring-pagina: snelle health checks, uptime-overzicht en kerncijfers van mijn Raspberry Pi server.
-        Live host-metrics bekijk ik in Grafana, met Prometheus als datasource en checks via Healthchecks.io (private dashboard).
+        Live host-metrics bekijk ik in Grafana, met Prometheus als datasource en endpoint checks/notificaties via Uptime Kuma.
       </p>
 
       <div class="grid">
@@ -125,15 +124,14 @@ const healthchecksUrl = 'https://healthchecks.io/';
           <li><strong>Node Exporter</strong> op de Pi voor host-metrics (CPU, RAM, disk).</li>
           <li><strong>Prometheus</strong> voor scraping en retentie van metrics.</li>
           <li><strong>Grafana</strong> voor visualisaties en alerts.</li>
-          <li><strong>Healthchecks.io</strong> voor endpoint checks en alerts op periodieke jobs.</li>
+          <li><strong>Uptime Kuma</strong> voor endpoint checks en notificaties (mail/Discord/Telegram).</li>
+          <li><strong>Healthchecks.io</strong> voor een dagelijkse nachtelijke ping (1x per dag) als extra heartbeat.</li>
         </ul>
       </section>
 
       <div class="actions">
         <a class="btn" href="/homelab">Bekijk Homelab details</a>
         <a class="btn" href="/services">Bekijk services</a>
-        <a class="btn" href={healthchecksUrl} target="_blank" rel="noreferrer">Open Healthchecks login ↗</a>
-        <p class="label">Healthchecks project is privé en opent na inloggen.</p>
         <a class="btn" href={grafanaUrl} target="_blank" rel="noreferrer">Open Grafana dashboard ↗</a>
       </div>
     </div>
