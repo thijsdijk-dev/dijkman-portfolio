@@ -5,6 +5,9 @@ const services = [
   { name: 'Nginx Proxy Manager', status: 'Intern', uptime: '99.90%', latency: '12 ms', target: 'TCP:81 (LAN)' },
   { name: 'Docker host (Raspberry Pi)', status: 'Online', uptime: '17 dagen', latency: 'n.v.t.', target: 'SSH + node exporter' },
 ];
+
+const grafanaUrl =
+  'https://grafana.dijkman.dev/d/rYdddlPWk/node-exporter-full?orgId=1&from=now-24h&to=now&timezone=browser&var-ds_prometheus=afe0mp0pozbb4f&var-job=node&var-nodename=c8f06e34739f&var-node=node-exporter:9100&refresh=1m';
 ---
 
 <html lang="nl">
@@ -58,7 +61,7 @@ const services = [
       <h1>Serverstats & Monitoring Dashboard</h1>
       <p class="subtitle">
         Dit dashboard is de basis voor mijn monitoring-pagina: snelle health checks, uptime-overzicht en kerncijfers van mijn Raspberry Pi server.
-        De volgende stap is live data via Prometheus + Grafana en notificaties via Uptime Kuma.
+        Live host-metrics bekijk ik in Grafana, met Prometheus als datasource en notificaties via Uptime Kuma.
       </p>
 
       <div class="grid">
@@ -128,6 +131,7 @@ const services = [
       <div class="actions">
         <a class="btn" href="/homelab">Bekijk Homelab details</a>
         <a class="btn" href="/services">Bekijk services</a>
+        <a class="btn" href={grafanaUrl} target="_blank" rel="noreferrer">Open Grafana dashboard ↗</a>
       </div>
     </div>
   </body>
