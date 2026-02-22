@@ -1,43 +1,85 @@
-# Astro Starter Kit: Minimal
+# dijkman-portfolio
 
-```sh
-npm create astro@latest -- --template minimal
+Portfolio website gebouwd met Astro.
+
+## Ontwikkeling
+
+| Command | Beschrijving |
+| --- | --- |
+| `npm install` | Installeert dependencies |
+| `npm run dev` | Start lokale dev server (`localhost:4321`) |
+| `npm run build` | Bouwt productie-output in `./dist` |
+| `npm run preview` | Preview van de build |
+| `npm run backup:usb` | Maakt backups naar een externe USB mount |
+| `npm run backup:install-cron` | Stelt een automatische dagelijkse backup in via cron |
+
+## USB backup op Raspberry Pi
+
+Voor jouw scenario (NPM data + `dist` + `docker-compose.yml` naar externe storage) is er een script toegevoegd:
+
+```bash
+npm run backup:usb
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+Standaard verwacht het script dat je USB stick gemount is op:
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+/media/pi/backup-usb
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Backups komen dan in:
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```text
+/media/pi/backup-usb/dijkman-portfolio-backups
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+Per run worden aparte `.tar.gz` bestanden gemaakt voor:
+- `~/.npm` (NPM data)
+- `./dist`
+- `./docker-compose.yml`
 
-## 🧞 Commands
+### Eigen paden instellen
 
-All commands are run from the root of the project, from a terminal:
+Je kunt paden overschrijven met environment variables:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+```bash
+USB_MOUNT=/mnt/usb16 \
+NPM_DATA_PATH=/home/pi/.npm \
+DIST_PATH=/workspace/dijkman-portfolio/dist \
+COMPOSE_FILE=/workspace/dijkman-portfolio/docker-compose.yml \
+npm run backup:usb
+```
 
-## 👀 Want to learn more?
+## Automatische backups (cron)
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Ja, backups kunnen automatisch draaien. Gebruik hiervoor:
+
+```bash
+USB_MOUNT=/mnt/usb16 npm run backup:install-cron
+```
+
+Dit installeert (of update) een cronregel die standaard elke nacht om **03:30** draait.
+
+### Cron planning aanpassen
+
+Standaard schema:
+
+```text
+30 3 * * *
+```
+
+Voorbeeld: elk uur draaien:
+
+```bash
+BACKUP_SCHEDULE='0 * * * *' USB_MOUNT=/mnt/usb16 npm run backup:install-cron
+```
+
+### Loglocatie aanpassen
+
+```bash
+LOG_FILE=/home/pi/backup.log USB_MOUNT=/mnt/usb16 npm run backup:install-cron
+```
+
+## Opmerking
+
+Als `dist` of `docker-compose.yml` (nog) niet bestaan, slaat het backupscript die onderdelen over en gaat het gewoon verder.
