@@ -1,159 +1,57 @@
 ---
 import Base from "../layouts/Base.astro";
+
+const solarusEmbedUrl = "https://www.solarus-games.org/";
+const zeldaFanGameEmbedUrl =
+  "https://archive.org/embed/softwarelibrary_nes?ui=embed&playlist=1&start=Legend_of_Zelda_-_Outlands_The_1996";
 ---
 
-<Base title="Arcade: Double Dragon II (Game Boy)" description="Speel Double Dragon II (Game Boy) in de browser en houd highscores bij.">
+<Base
+  title="Arcade: Solarus & Zelda fan game"
+  description="Draai Solarus en een Zelda fan game direct op de arcadepagina."
+>
   <section class="card hero">
-    <p class="badge">Arcade demo</p>
-    <h1>Double Dragon II (Game Boy) demo</h1>
+    <p class="badge">Arcade collectie</p>
+    <h1>Solarus + Zelda fan game</h1>
     <p>
-      Hier draait Double Dragon II (Game Boy) direct in de browser via een ingesloten emulator.
-      Daaronder kun je je score invullen om een lokale leaderboard bij te houden voor je portfolio-demo.
+      Op deze pagina draaien nu twee embedded items: <strong>Solarus</strong> en een
+      <strong>Zelda fan game</strong>. Beide zijn direct op de pagina ingesloten.
     </p>
-    <p class="note">
-      Bron: Internet Archive embed voor de Game Boy-titel.
-    </p>
+    <p class="note">Tip: klik eerst in het spelvenster om toetsenbordbesturing te activeren.</p>
   </section>
 
-  <section class="card">
-    <h2>Speel de demo</h2>
-    <div class="doom-wrap">
-      <iframe
-        title="Double Dragon II Game Boy emulator"
-        src="https://archive.org/embed/softwarelibrary_gb?ui=embed&playlist=1&start=Double_Dragon_II_1991_Acclaim"
-        width="640"
-        height="400"
-        frameborder="0"
-        webkitallowfullscreen="true"
-        mozallowfullscreen="true"
-        allowfullscreen
-      ></iframe>
-    </div>
-    <p class="note">Tip: klik eerst in het spelvenster zodat toetsenbordbesturing actief wordt.</p>
-  </section>
+  <section class="game-grid">
+    <article class="card game-card">
+      <h2>Solarus</h2>
+      <div class="game-wrap">
+        <iframe
+          title="Solarus website"
+          src={solarusEmbedUrl}
+          frameborder="0"
+          webkitallowfullscreen="true"
+          mozallowfullscreen="true"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <p class="note">Bron: officiële Solarus website.</p>
+    </article>
 
-  <section class="card">
-    <h2>Highscores</h2>
-    <p class="note">
-      Vul na je run je naam en score in (bijv. level progress, tijdscore of challenge points).
-      Scores worden lokaal in je browser opgeslagen.
-    </p>
-
-    <form id="score-form" class="score-form">
-      <label>
-        Naam
-        <input type="text" id="player" maxlength="24" placeholder="Bijv. Thijs" required />
-      </label>
-      <label>
-        Score
-        <input type="number" id="score" min="0" step="1" placeholder="Bijv. 4200" required />
-      </label>
-      <label>
-        Notitie
-        <input type="text" id="notes" maxlength="60" placeholder="E1M1 speedrun" />
-      </label>
-      <button type="submit">Score opslaan</button>
-      <button type="button" id="reset" class="danger">Leaderboard legen</button>
-    </form>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Naam</th>
-            <th>Score</th>
-            <th>Notitie</th>
-            <th>Datum</th>
-          </tr>
-        </thead>
-        <tbody id="score-body"></tbody>
-      </table>
-    </div>
+    <article class="card game-card">
+      <h2>Zelda fan game (Outlands)</h2>
+      <div class="game-wrap">
+        <iframe
+          title="Zelda fan game emulator"
+          src={zeldaFanGameEmbedUrl}
+          frameborder="0"
+          webkitallowfullscreen="true"
+          mozallowfullscreen="true"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <p class="note">Bron: Internet Archive NES fan project / ROM-hack collectie.</p>
+    </article>
   </section>
 </Base>
-
-<script>
-  const STORAGE_KEY = "double-dragon-ii-gb-highscores-v1";
-
-  const form = document.querySelector("#score-form");
-  const playerInput = document.querySelector("#player");
-  const scoreInput = document.querySelector("#score");
-  const notesInput = document.querySelector("#notes");
-  const body = document.querySelector("#score-body");
-  const resetButton = document.querySelector("#reset");
-
-  const readScores = () => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  };
-
-  const writeScores = (scores) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
-  };
-
-  const renderScores = () => {
-    const scores = readScores();
-
-    if (!body) return;
-
-    if (scores.length === 0) {
-      body.innerHTML = `<tr><td colspan="5" class="empty">Nog geen scores. Zet de eerste neer 🔥</td></tr>`;
-      return;
-    }
-
-    body.innerHTML = scores
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 15)
-      .map(
-        (entry, index) => `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${entry.player}</td>
-            <td>${entry.score}</td>
-            <td>${entry.notes || "-"}</td>
-            <td>${new Date(entry.createdAt).toLocaleDateString("nl-NL")}</td>
-          </tr>
-        `
-      )
-      .join("");
-  };
-
-  form?.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const player = playerInput?.value.trim();
-    const score = Number(scoreInput?.value);
-    const notes = notesInput?.value.trim();
-
-    if (!player || Number.isNaN(score) || score < 0) return;
-
-    const next = [
-      ...readScores(),
-      {
-        player,
-        score,
-        notes,
-        createdAt: new Date().toISOString(),
-      },
-    ];
-
-    writeScores(next);
-    form.reset();
-    renderScores();
-  });
-
-  resetButton?.addEventListener("click", () => {
-    localStorage.removeItem(STORAGE_KEY);
-    renderScores();
-  });
-
-  renderScores();
-</script>
 
 <style>
   .card {
@@ -172,69 +70,37 @@ import Base from "../layouts/Base.astro";
     padding: 4px 10px;
   }
 
-  .hero h1 { margin: 10px 0; }
+  .hero h1 {
+    margin: 10px 0;
+  }
 
-  .doom-wrap {
+  .game-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+
+  .game-card {
+    display: grid;
+    gap: 12px;
+  }
+
+  .game-wrap {
     aspect-ratio: 16 / 10;
-    width: min(100%, 980px);
+    width: 100%;
     border: 1px solid #2a2a38;
     border-radius: 12px;
     overflow: hidden;
     background: #0a0a0f;
   }
 
-  .doom-wrap iframe {
+  .game-wrap iframe {
     width: 100%;
     height: 100%;
     border: 0;
   }
 
-  .score-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    align-items: end;
+  .note {
+    opacity: 0.84;
   }
-
-  label {
-    display: grid;
-    gap: 6px;
-    font-size: 14px;
-  }
-
-  input {
-    background: #0d0d14;
-    color: #f2f2f7;
-    border: 1px solid #3a3a4a;
-    border-radius: 10px;
-    padding: 10px;
-  }
-
-  button {
-    border: 1px solid #454560;
-    background: #1b1b28;
-    color: #f2f2f7;
-    border-radius: 10px;
-    padding: 10px;
-    cursor: pointer;
-  }
-
-  button.danger { border-color: #744; }
-
-  .table-wrap { overflow-x: auto; margin-top: 14px; }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-
-  th, td {
-    border-bottom: 1px solid #2a2a38;
-    text-align: left;
-    padding: 10px 8px;
-  }
-
-  .empty { opacity: 0.8; text-align: center; }
-  .note { opacity: 0.84; }
 </style>
