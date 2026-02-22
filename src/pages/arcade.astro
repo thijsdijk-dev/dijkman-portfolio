@@ -1,88 +1,159 @@
 ---
 import Base from "../layouts/Base.astro";
-
-const games = [
-  {
-    title: "Space Shooter (CC0)",
-    genre: "Arcade / shooter",
-    license: "CC0 / Public Domain",
-    why: "Sterke keuze voor portfolio omdat je sprites, audio en gameplay vrij mag aanpassen.",
-    sourceHint: "Zoek op itch.io naar ‘CC0 space shooter html5’.",
-  },
-  {
-    title: "Breakout Clone (MIT)",
-    genre: "Arcade / classic",
-    license: "MIT",
-    why: "Korte leercurve, goed voor score systeem + levels + mobile controls.",
-    sourceHint: "Zoek op GitHub naar ‘breakout html5 MIT’.",
-  },
-  {
-    title: "Pixel Platformer Starter (CC0 assets)",
-    genre: "Arcade / platform",
-    license: "Code vaak MIT, assets CC0",
-    why: "Makkelijk uit te breiden met checkpoints en leaderboard API.",
-    sourceHint: "OpenGameArt + een open-source Phaser starter.",
-  },
-  {
-    title: "Asteroids-style Web Game (BSD/MIT)",
-    genre: "Arcade / retro",
-    license: "BSD of MIT",
-    why: "Retro uitstraling met weinig assets; leuk voor keyboard support en game loops.",
-    sourceHint: "Zoek op GitHub naar ‘asteroids javascript open source’.",
-  },
-  {
-    title: "Tetris-like clone (open source)",
-    genre: "Puzzle / arcade",
-    license: "Vaak MIT of GPL (check per repo)",
-    why: "Bekende gameplay; laat codekwaliteit en UX-verbeteringen goed zien.",
-    sourceHint: "Zoek op GitHub naar ‘tetris clone javascript MIT’.",
-  },
-];
 ---
 
-<Base title="Arcade demo's" description="Copyright-vrije arcadegame ideeën voor mijn portfolio.">
-  <section class="hero card">
-    <p class="badge">Nieuw portfolio onderdeel</p>
-    <h1>Arcade demo pagina</h1>
+<Base title="Arcade: DOOM demo" description="Speel de originele DOOM shareware demo en houd highscores bij.">
+  <section class="card hero">
+    <p class="badge">Arcade demo</p>
+    <h1>DOOM (1993) shareware demo</h1>
     <p>
-      Op deze pagina verzamel ik <strong>copyright-vrije</strong> game-ideeën die ik kan gebruiken als interactieve
-      demo. Doel: spelgevoel combineren met software engineering (UI, deployment, API, logging en leaderboard).
+      Hier draait de klassieke DOOM shareware-versie direct in de browser via een ingesloten DOS-emulator.
+      Daaronder kun je je score invullen om een lokale leaderboard bij te houden voor je portfolio-demo.
+    </p>
+    <p class="note">
+      Bron: Internet Archive MS-DOS collectie. Gebruik alleen de shareware/demo variant.
     </p>
   </section>
 
   <section class="card">
-    <h2>Top 5 opties (copyright-vriendelijk)</h2>
-    <div class="grid">
-      {games.map((game) => (
-        <article class="game-card">
-          <h3>{game.title}</h3>
-          <p><strong>Genre:</strong> {game.genre}</p>
-          <p><strong>Licentie:</strong> {game.license}</p>
-          <p>{game.why}</p>
-          <p class="hint">🔎 {game.sourceHint}</p>
-        </article>
-      ))}
+    <h2>Speel de demo</h2>
+    <div class="doom-wrap">
+      <iframe
+        title="DOOM 1993 shareware demo"
+        src="https://archive.org/embed/msdos_Doom_1993"
+        width="640"
+        height="400"
+        frameborder="0"
+        webkitallowfullscreen="true"
+        mozallowfullscreen="true"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p class="note">Tip: klik eerst in het spelvenster zodat toetsenbordbesturing actief wordt.</p>
+  </section>
+
+  <section class="card">
+    <h2>Highscores</h2>
+    <p class="note">
+      Vul na je run je naam en score in (bijv. kills, tijdscore of custom challenge points).
+      Scores worden lokaal in je browser opgeslagen.
+    </p>
+
+    <form id="score-form" class="score-form">
+      <label>
+        Naam
+        <input type="text" id="player" maxlength="24" placeholder="Bijv. Thijs" required />
+      </label>
+      <label>
+        Score
+        <input type="number" id="score" min="0" step="1" placeholder="Bijv. 4200" required />
+      </label>
+      <label>
+        Notitie
+        <input type="text" id="notes" maxlength="60" placeholder="E1M1 speedrun" />
+      </label>
+      <button type="submit">Score opslaan</button>
+      <button type="button" id="reset" class="danger">Leaderboard legen</button>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Naam</th>
+            <th>Score</th>
+            <th>Notitie</th>
+            <th>Datum</th>
+          </tr>
+        </thead>
+        <tbody id="score-body"></tbody>
+      </table>
     </div>
   </section>
-
-  <section class="card">
-    <h2>Checklist voordat ik publiceer</h2>
-    <ul>
-      <li>Licentie controleren in de repository (LICENSE + README).</li>
-      <li>Credits tonen op deze pagina (bron, auteur, licentie).</li>
-      <li>Geen commerciële ROMs of assets zonder toestemming gebruiken.</li>
-      <li>Mijn eigen aanpassingen documenteren (UI, score, deploy, backend koppeling).</li>
-    </ul>
-  </section>
-
-  <section class="card">
-    <h2>Volgende stap</h2>
-    <p>
-      Eerste implementatie: een kleine HTML5 arcadegame embedden en daarna een eenvoudige
-      <strong>Python of Java API</strong> toevoegen voor highscores.
-    </p>
-  </section>
 </Base>
+
+<script>
+  const STORAGE_KEY = "doom-local-highscores-v1";
+
+  const form = document.querySelector("#score-form");
+  const playerInput = document.querySelector("#player");
+  const scoreInput = document.querySelector("#score");
+  const notesInput = document.querySelector("#notes");
+  const body = document.querySelector("#score-body");
+  const resetButton = document.querySelector("#reset");
+
+  const readScores = () => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const writeScores = (scores) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+  };
+
+  const renderScores = () => {
+    const scores = readScores();
+
+    if (!body) return;
+
+    if (scores.length === 0) {
+      body.innerHTML = `<tr><td colspan="5" class="empty">Nog geen scores. Zet de eerste neer 🔥</td></tr>`;
+      return;
+    }
+
+    body.innerHTML = scores
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 15)
+      .map(
+        (entry, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${entry.player}</td>
+            <td>${entry.score}</td>
+            <td>${entry.notes || "-"}</td>
+            <td>${new Date(entry.createdAt).toLocaleDateString("nl-NL")}</td>
+          </tr>
+        `
+      )
+      .join("");
+  };
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const player = playerInput?.value.trim();
+    const score = Number(scoreInput?.value);
+    const notes = notesInput?.value.trim();
+
+    if (!player || Number.isNaN(score) || score < 0) return;
+
+    const next = [
+      ...readScores(),
+      {
+        player,
+        score,
+        notes,
+        createdAt: new Date().toISOString(),
+      },
+    ];
+
+    writeScores(next);
+    form.reset();
+    renderScores();
+  });
+
+  resetButton?.addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    renderScores();
+  });
+
+  renderScores();
+</script>
 
 <style>
   .card {
@@ -93,45 +164,77 @@ const games = [
     margin-top: 18px;
   }
 
-  .hero h1 {
-    margin-top: 8px;
-  }
-
   .badge {
     display: inline-block;
     font-size: 12px;
     border: 1px solid #4f4f6a;
     border-radius: 999px;
     padding: 4px 10px;
-    opacity: 0.95;
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-  }
+  .hero h1 { margin: 10px 0; }
 
-  .game-card {
-    background: #0d0d14;
+  .doom-wrap {
+    aspect-ratio: 16 / 10;
+    width: min(100%, 980px);
     border: 1px solid #2a2a38;
     border-radius: 12px;
-    padding: 14px;
+    overflow: hidden;
+    background: #0a0a0f;
   }
 
-  .game-card h3 {
-    margin-top: 0;
+  .doom-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 
-  .hint {
-    opacity: 0.85;
+  .score-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    align-items: end;
+  }
+
+  label {
+    display: grid;
+    gap: 6px;
     font-size: 14px;
   }
 
-  ul {
-    margin: 0;
-    padding-left: 20px;
-    display: grid;
-    gap: 8px;
+  input {
+    background: #0d0d14;
+    color: #f2f2f7;
+    border: 1px solid #3a3a4a;
+    border-radius: 10px;
+    padding: 10px;
   }
+
+  button {
+    border: 1px solid #454560;
+    background: #1b1b28;
+    color: #f2f2f7;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  button.danger { border-color: #744; }
+
+  .table-wrap { overflow-x: auto; margin-top: 14px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th, td {
+    border-bottom: 1px solid #2a2a38;
+    text-align: left;
+    padding: 10px 8px;
+  }
+
+  .empty { opacity: 0.8; text-align: center; }
+  .note { opacity: 0.84; }
 </style>
