@@ -176,8 +176,11 @@ const stats = [
           </a>
         </p>
       </Card>
-      <Card title="Backups (next)">
-        Backup NPM data + site dist + compose files.
+      <Card title="Backups">
+        NPM data + site dist worden nu automatisch geback-upt naar externe storage (USB) via cron.
+      </Card>
+      <Card title="Updates">
+        Deploy updates lopen via GitHub Actions; wijzigingen op main worden automatisch naar de Pi uitgerold.
       </Card>
       <Card title="Documentatie">
         “Living documentation” op deze pagina: wat draait, waarom, hoe.
@@ -189,7 +192,7 @@ const stats = [
     <Roadmap
       items={[
         { text: "Uptime Kuma toegevoegd + status badge op /homelab", done: true },
-        { text: "Backups: NPM data + dist + compose naar externe storage", done: false },
+        { text: "Backups: NPM data + dist + compose naar externe storage", done: true },
         { text: "Fail2ban + sshd hardening + firewall (ufw) baseline", done: false },
         { text: "Infra repo: docker-compose.yml + README met recovery steps", done: false },
       ]}

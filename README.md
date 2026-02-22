@@ -11,6 +11,7 @@ Portfolio website gebouwd met Astro.
 | `npm run build` | Bouwt productie-output in `./dist` |
 | `npm run preview` | Preview van de build |
 | `npm run backup:usb` | Maakt backups naar een externe USB mount |
+| `npm run backup:install-cron` | Stelt een automatische dagelijkse backup in via cron |
 
 ## USB backup op Raspberry Pi
 
@@ -49,20 +50,36 @@ COMPOSE_FILE=/workspace/dijkman-portfolio/docker-compose.yml \
 npm run backup:usb
 ```
 
-### Automatisch dagelijks via cron
+## Automatische backups (cron)
 
-Open je crontab:
+Ja, backups kunnen automatisch draaien. Gebruik hiervoor:
 
 ```bash
-crontab -e
+USB_MOUNT=/mnt/usb16 npm run backup:install-cron
 ```
 
-En voeg bijvoorbeeld toe (elke nacht 03:30):
+Dit installeert (of update) een cronregel die standaard elke nacht om **03:30** draait.
 
-```cron
-30 3 * * * cd /workspace/dijkman-portfolio && USB_MOUNT=/mnt/usb16 npm run backup:usb >> /var/log/dijkman-backup.log 2>&1
+### Cron planning aanpassen
+
+Standaard schema:
+
+```text
+30 3 * * *
+```
+
+Voorbeeld: elk uur draaien:
+
+```bash
+BACKUP_SCHEDULE='0 * * * *' USB_MOUNT=/mnt/usb16 npm run backup:install-cron
+```
+
+### Loglocatie aanpassen
+
+```bash
+LOG_FILE=/home/pi/backup.log USB_MOUNT=/mnt/usb16 npm run backup:install-cron
 ```
 
 ## Opmerking
 
-Als `dist` of `docker-compose.yml` (nog) niet bestaan, slaat het script die onderdelen over en gaat het gewoon verder.
+Als `dist` of `docker-compose.yml` (nog) niet bestaan, slaat het backupscript die onderdelen over en gaat het gewoon verder.
