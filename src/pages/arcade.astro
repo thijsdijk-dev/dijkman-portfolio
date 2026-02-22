@@ -1,40 +1,39 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const solarisEmbedUrl =
-  "https://archive.org/embed/softwarelibrary_atari_2600?ui=embed&playlist=1&start=Solaris_1986_Atari";
+const solarusEmbedUrl = "https://www.solarus-games.org/";
 const zeldaFanGameEmbedUrl =
   "https://archive.org/embed/softwarelibrary_nes?ui=embed&playlist=1&start=Legend_of_Zelda_-_Outlands_The_1996";
 ---
 
 <Base
-  title="Arcade: Solaris & Zelda fan game"
-  description="Speel Solaris en een Zelda fan game direct op de arcadepagina."
+  title="Arcade: Solarus & Zelda fan game"
+  description="Draai Solarus en een Zelda fan game direct op de arcadepagina."
 >
   <section class="card hero">
     <p class="badge">Arcade collectie</p>
-    <h1>Solaris + Zelda fan game</h1>
+    <h1>Solarus + Zelda fan game</h1>
     <p>
-      Op deze pagina draaien nu twee embedded games: <strong>Solaris</strong> en een
-      <strong>Zelda fan game</strong>. Beide starten direct in de browser.
+      Op deze pagina draaien nu twee embedded items: <strong>Solarus</strong> en een
+      <strong>Zelda fan game</strong>. Beide zijn direct op de pagina ingesloten.
     </p>
     <p class="note">Tip: klik eerst in het spelvenster om toetsenbordbesturing te activeren.</p>
   </section>
 
   <section class="game-grid">
     <article class="card game-card">
-      <h2>Solaris</h2>
+      <h2>Solarus</h2>
       <div class="game-wrap">
         <iframe
-          title="Solaris game emulator"
-          src={solarisEmbedUrl}
+          title="Solarus website"
+          src={solarusEmbedUrl}
           frameborder="0"
           webkitallowfullscreen="true"
           mozallowfullscreen="true"
           allowfullscreen
         ></iframe>
       </div>
-      <p class="note">Bron: Internet Archive Atari 2600 software library.</p>
+      <p class="note">Bron: officiële Solarus website.</p>
     </article>
 
     <article class="card game-card">
