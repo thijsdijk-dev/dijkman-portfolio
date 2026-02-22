@@ -1,0 +1,137 @@
+---
+import Base from "../layouts/Base.astro";
+
+const games = [
+  {
+    title: "Space Shooter (CC0)",
+    genre: "Arcade / shooter",
+    license: "CC0 / Public Domain",
+    why: "Sterke keuze voor portfolio omdat je sprites, audio en gameplay vrij mag aanpassen.",
+    sourceHint: "Zoek op itch.io naar ‘CC0 space shooter html5’.",
+  },
+  {
+    title: "Breakout Clone (MIT)",
+    genre: "Arcade / classic",
+    license: "MIT",
+    why: "Korte leercurve, goed voor score systeem + levels + mobile controls.",
+    sourceHint: "Zoek op GitHub naar ‘breakout html5 MIT’.",
+  },
+  {
+    title: "Pixel Platformer Starter (CC0 assets)",
+    genre: "Arcade / platform",
+    license: "Code vaak MIT, assets CC0",
+    why: "Makkelijk uit te breiden met checkpoints en leaderboard API.",
+    sourceHint: "OpenGameArt + een open-source Phaser starter.",
+  },
+  {
+    title: "Asteroids-style Web Game (BSD/MIT)",
+    genre: "Arcade / retro",
+    license: "BSD of MIT",
+    why: "Retro uitstraling met weinig assets; leuk voor keyboard support en game loops.",
+    sourceHint: "Zoek op GitHub naar ‘asteroids javascript open source’.",
+  },
+  {
+    title: "Tetris-like clone (open source)",
+    genre: "Puzzle / arcade",
+    license: "Vaak MIT of GPL (check per repo)",
+    why: "Bekende gameplay; laat codekwaliteit en UX-verbeteringen goed zien.",
+    sourceHint: "Zoek op GitHub naar ‘tetris clone javascript MIT’.",
+  },
+];
+---
+
+<Base title="Arcade demo's" description="Copyright-vrije arcadegame ideeën voor mijn portfolio.">
+  <section class="hero card">
+    <p class="badge">Nieuw portfolio onderdeel</p>
+    <h1>Arcade demo pagina</h1>
+    <p>
+      Op deze pagina verzamel ik <strong>copyright-vrije</strong> game-ideeën die ik kan gebruiken als interactieve
+      demo. Doel: spelgevoel combineren met software engineering (UI, deployment, API, logging en leaderboard).
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>Top 5 opties (copyright-vriendelijk)</h2>
+    <div class="grid">
+      {games.map((game) => (
+        <article class="game-card">
+          <h3>{game.title}</h3>
+          <p><strong>Genre:</strong> {game.genre}</p>
+          <p><strong>Licentie:</strong> {game.license}</p>
+          <p>{game.why}</p>
+          <p class="hint">🔎 {game.sourceHint}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Checklist voordat ik publiceer</h2>
+    <ul>
+      <li>Licentie controleren in de repository (LICENSE + README).</li>
+      <li>Credits tonen op deze pagina (bron, auteur, licentie).</li>
+      <li>Geen commerciële ROMs of assets zonder toestemming gebruiken.</li>
+      <li>Mijn eigen aanpassingen documenteren (UI, score, deploy, backend koppeling).</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Volgende stap</h2>
+    <p>
+      Eerste implementatie: een kleine HTML5 arcadegame embedden en daarna een eenvoudige
+      <strong>Python of Java API</strong> toevoegen voor highscores.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .card {
+    background: #101018;
+    border: 1px solid #2d2d3c;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 18px;
+  }
+
+  .hero h1 {
+    margin-top: 8px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    border: 1px solid #4f4f6a;
+    border-radius: 999px;
+    padding: 4px 10px;
+    opacity: 0.95;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .game-card {
+    background: #0d0d14;
+    border: 1px solid #2a2a38;
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .game-card h3 {
+    margin-top: 0;
+  }
+
+  .hint {
+    opacity: 0.85;
+    font-size: 14px;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 8px;
+  }
+</style>
