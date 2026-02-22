@@ -1,0 +1,134 @@
+---
+const services = [
+  { name: 'Portfolio website', status: 'Online', uptime: '99.98%', latency: '42 ms', target: 'HTTPS /' },
+  { name: 'whoami.dijkman.dev', status: 'Online', uptime: '99.95%', latency: '38 ms', target: 'HTTPS /health' },
+  { name: 'Nginx Proxy Manager', status: 'Intern', uptime: '99.90%', latency: '12 ms', target: 'TCP:81 (LAN)' },
+  { name: 'Docker host (Raspberry Pi)', status: 'Online', uptime: '17 dagen', latency: 'n.v.t.', target: 'SSH + node exporter' },
+];
+---
+
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard — Serverstats & Monitoring</title>
+    <meta name="description" content="Realtime dashboard concept voor serverstats en monitoring van mijn homelab services." />
+    <style>
+      :root {
+        --bg: #0b0b0f;
+        --card: #101018;
+        --line: #2c2c3a;
+        --text: #f2f2f7;
+        --muted: #a5a5b5;
+        --ok: #2dd4bf;
+        --warn: #f59e0b;
+      }
+      body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; background: var(--bg); color: var(--text); }
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 32px; }
+      .nav { margin-bottom: 18px; opacity: .85; }
+      a { color: inherit; }
+      h1 { margin: 0; font-size: clamp(1.8rem, 2vw + 1rem, 2.7rem); }
+      .subtitle { color: var(--muted); margin-top: 10px; max-width: 72ch; }
+      .grid { margin-top: 24px; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+      .metric { font-size: 1.9rem; font-weight: 700; margin: 6px 0 0; }
+      .kicker { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+      .label { color: var(--muted); margin: 0; }
+      .bar { margin-top: 10px; height: 8px; background: #1a1a27; border-radius: 999px; overflow: hidden; }
+      .bar > span { height: 100%; display: block; border-radius: 999px; }
+      .ok { background: linear-gradient(90deg, #14b8a6, #2dd4bf); }
+      .warn { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+      table { width: 100%; border-collapse: collapse; margin-top: 26px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+      th, td { padding: 12px; text-align: left; border-bottom: 1px solid #242433; font-size: 14px; }
+      th { color: var(--muted); font-weight: 600; }
+      tr:last-child td { border-bottom: none; }
+      .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; border: 1px solid; }
+      .online { color: #99f6e4; border-color: #2dd4bf66; background: #0f2f2a; }
+      .internal { color: #fde68a; border-color: #f59e0b66; background: #3a2805; }
+      .stack { margin-top: 22px; padding: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
+      ul { margin: 10px 0 0 20px; color: var(--muted); }
+      .actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+      .btn { text-decoration: none; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+      .btn:hover { border-color: #63637a; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="nav"><a href="/">← Home</a></div>
+      <h1>Serverstats & Monitoring Dashboard</h1>
+      <p class="subtitle">
+        Dit dashboard is de basis voor mijn monitoring-pagina: snelle health checks, uptime-overzicht en kerncijfers van mijn Raspberry Pi server.
+        De volgende stap is live data via Prometheus + Grafana en notificaties via Uptime Kuma.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <p class="kicker">CPU belasting</p>
+          <p class="metric">37%</p>
+          <p class="label">Gemiddelde over 5 minuten</p>
+          <div class="bar"><span class="ok" style="width:37%"></span></div>
+        </div>
+        <div class="card">
+          <p class="kicker">RAM gebruik</p>
+          <p class="metric">1.9 / 4 GB</p>
+          <p class="label">48% gebruikt</p>
+          <div class="bar"><span class="ok" style="width:48%"></span></div>
+        </div>
+        <div class="card">
+          <p class="kicker">Disk usage</p>
+          <p class="metric">64%</p>
+          <p class="label">Nog 28 GB vrij</p>
+          <div class="bar"><span class="warn" style="width:64%"></span></div>
+        </div>
+        <div class="card">
+          <p class="kicker">Netwerk</p>
+          <p class="metric">94 Mbps</p>
+          <p class="label">Piek in laatste 15 minuten</p>
+          <div class="bar"><span class="ok" style="width:72%"></span></div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Status</th>
+            <th>Uptime</th>
+            <th>Latency</th>
+            <th>Check</th>
+          </tr>
+        </thead>
+        <tbody>
+          {services.map((service) => (
+            <tr>
+              <td>{service.name}</td>
+              <td>
+                <span class={`badge ${service.status === 'Online' ? 'online' : 'internal'}`}>
+                  {service.status}
+                </span>
+              </td>
+              <td>{service.uptime}</td>
+              <td>{service.latency}</td>
+              <td>{service.target}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <section class="stack">
+        <p class="kicker">Monitoring stack (roadmap)</p>
+        <ul>
+          <li><strong>Node Exporter</strong> op de Pi voor host-metrics (CPU, RAM, disk).</li>
+          <li><strong>Prometheus</strong> voor scraping en retentie van metrics.</li>
+          <li><strong>Grafana</strong> voor visualisaties en alerts.</li>
+          <li><strong>Uptime Kuma</strong> voor endpoint checks en notificaties (mail/Discord/Telegram).</li>
+        </ul>
+      </section>
+
+      <div class="actions">
+        <a class="btn" href="/homelab">Bekijk Homelab details</a>
+        <a class="btn" href="/services">Bekijk services</a>
+      </div>
+    </div>
+  </body>
+</html>
