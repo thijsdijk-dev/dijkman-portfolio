@@ -5,11 +5,6 @@ const qrPng = "/assets/qr-cv.png";
 const publicCvUrl = "https://www.dijkman.dev/assets/cv.pdf";
 const cvUpdatedAt = "Januari 2026";
 
-const highlights = [
-  "Software Engineer met focus op webdevelopment en infrastructuur.",
-  "Ervaring met bouwen, monitoren en beheren van moderne applicaties.",
-  "Praktische mentaliteit: van concept en code tot deployment.",
-];
 ---
 
 <!doctype html>
@@ -217,15 +212,6 @@ const highlights = [
         background: white;
       }
 
-      .hint {
-        margin-top: 14px;
-        border-radius: 14px;
-        border: 1px solid rgba(47, 211, 154, 0.38);
-        background: rgba(47, 211, 154, 0.13);
-        color: rgba(255, 255, 255, 0.9);
-        padding: 12px;
-      }
-
       @media (max-width: 680px) {
         .topbar {
           flex-direction: column;
@@ -271,14 +257,6 @@ const highlights = [
         </section>
 
         <section class="card">
-          <h2>In het kort</h2>
-          <p class="muted">Een korte samenvatting van mijn profiel:</p>
-          <ul>
-            {highlights.map((highlight) => <li>{highlight}</li>)}
-          </ul>
-        </section>
-
-        <section class="card">
           <h2>QR-code</h2>
           <p class="muted">Scan de QR-code met je telefoon om direct naar de CV-PDF te gaan.</p>
 
@@ -286,7 +264,6 @@ const highlights = [
             <img class="qr" src={qrPng} alt="QR-code naar CV PDF" loading="lazy" />
             <div>
               <div class="code">{publicCvUrl}</div>
-              <p class="hint"><strong>Tip:</strong> handig voor print, events en snelle mobiele toegang.</p>
             </div>
           </div>
         </section>
