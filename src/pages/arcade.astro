@@ -1,0 +1,215 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="Arcade: Double Dragon II (Game Boy)" description="Speel Double Dragon II (Game Boy) in de browser en houd highscores bij.">
+  <section class="hero">
+    <div class="badges">
+      <span class="badge">Arcade demo</span>
+      <span class="badge">Game Boy emulator</span>
+      <span class="badge">Local leaderboard</span>
+    </div>
+    <h1 style="margin:0 0 10px 0">Double Dragon II (Game Boy)</h1>
+    <p class="muted" style="margin:0">
+      Speel de game direct in de browser en registreer daarna je score in de lokale leaderboard.
+      Deze opzet past bij de rest van mijn portfolio: compact, technisch en praktisch.
+    </p>
+    <p class="muted" style="margin-top:12px">
+      Bron: Internet Archive embed voor de Game Boy-titel.
+    </p>
+  </section>
+
+  <section class="card" style="margin-top:16px">
+    <h2 style="margin-top:0">Speel de demo</h2>
+    <div class="game-wrap">
+      <iframe
+        title="Double Dragon II Game Boy emulator"
+        src="https://archive.org/embed/softwarelibrary_gb?ui=embed&playlist=1&start=Double_Dragon_II_1991_Acclaim"
+        width="640"
+        height="400"
+        frameborder="0"
+        webkitallowfullscreen="true"
+        mozallowfullscreen="true"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p class="muted" style="margin-bottom:0">Tip: klik eerst in het spelvenster zodat toetsenbordbesturing actief wordt.</p>
+  </section>
+
+  <section class="card" style="margin-top:16px">
+    <h2 style="margin-top:0">Highscores</h2>
+    <p class="muted">
+      Vul na je run je naam en score in (bijv. level progress, tijdscore of challenge points).
+      Scores worden lokaal in je browser opgeslagen.
+    </p>
+
+    <form id="score-form" class="score-form">
+      <label>
+        Naam
+        <input type="text" id="player" maxlength="24" placeholder="Bijv. Thijs" required />
+      </label>
+      <label>
+        Score
+        <input type="number" id="score" min="0" step="1" placeholder="Bijv. 4200" required />
+      </label>
+      <label>
+        Notitie
+        <input type="text" id="notes" maxlength="60" placeholder="Bijv. stage 1 zonder damage" />
+      </label>
+      <button type="submit">Score opslaan</button>
+      <button type="button" id="reset" class="secondary">Leaderboard legen</button>
+    </form>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Naam</th>
+            <th>Score</th>
+            <th>Notitie</th>
+            <th>Datum</th>
+          </tr>
+        </thead>
+        <tbody id="score-body"></tbody>
+      </table>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const STORAGE_KEY = "double-dragon-ii-gb-highscores-v1";
+
+  const form = document.querySelector("#score-form");
+  const playerInput = document.querySelector("#player");
+  const scoreInput = document.querySelector("#score");
+  const notesInput = document.querySelector("#notes");
+  const body = document.querySelector("#score-body");
+  const resetButton = document.querySelector("#reset");
+
+  const readScores = () => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const writeScores = (scores) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+  };
+
+  const renderScores = () => {
+    const scores = readScores();
+
+    if (!body) return;
+
+    if (scores.length === 0) {
+      body.innerHTML = `<tr><td colspan="5" class="empty">Nog geen scores. Zet de eerste neer 🔥</td></tr>`;
+      return;
+    }
+
+    body.innerHTML = scores
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 15)
+      .map(
+        (entry, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${entry.player}</td>
+            <td>${entry.score}</td>
+            <td>${entry.notes || "-"}</td>
+            <td>${new Date(entry.createdAt).toLocaleDateString("nl-NL")}</td>
+          </tr>
+        `
+      )
+      .join("");
+  };
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const player = playerInput?.value.trim();
+    const score = Number(scoreInput?.value);
+    const notes = notesInput?.value.trim();
+
+    if (!player || Number.isNaN(score) || score < 0) return;
+
+    const next = [
+      ...readScores(),
+      {
+        player,
+        score,
+        notes,
+        createdAt: new Date().toISOString(),
+      },
+    ];
+
+    writeScores(next);
+    form.reset();
+    renderScores();
+  });
+
+  resetButton?.addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    renderScores();
+  });
+
+  renderScores();
+</script>
+
+<style>
+  .game-wrap {
+    aspect-ratio: 16 / 10;
+    width: min(100%, 980px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0a0a0f;
+    margin-bottom: 12px;
+  }
+
+  .game-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .score-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    align-items: end;
+  }
+
+  label {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+  }
+
+  input {
+    background: #0d0d14;
+    color: #f2f2f7;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .table-wrap { overflow-x: auto; margin-top: 14px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th, td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: left;
+    padding: 10px 8px;
+  }
+
+  .empty { opacity: 0.8; text-align: center; }
+</style>
