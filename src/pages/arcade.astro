@@ -1,48 +1,52 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const jarPath = "/games/pixel-dungeon/desktop-1.7.2a-1.jar";
+const playUrl = "/games/pixel-dungeon/play.html";
 ---
 
 <Base
   title="Arcade: Pixel Dungeon"
-  description="Pixel Dungeon launcher vanaf je eigen server (desktop JAR)."
+  description="Speel Pixel Dungeon direct in je browser vanaf je eigen server."
 >
   <section class="hero arcade-hero">
     <p class="badge">Arcade</p>
-    <h1>Pixel Dungeon (self-hosted)</h1>
+    <h1>Pixel Dungeon</h1>
     <p>
-      Je gamebestand staat op je eigen server als
-      <code>desktop-1.7.2a-1.jar</code>. Omdat dit een desktop Java build is,
-      draait de game stabiel als lokale app (niet als HTML5 iframe).
+      Deze pagina start Pixel Dungeon nu <strong>direct in de browser</strong> via je eigen
+      serverpad. Je hoeft niets te downloaden om te spelen.
     </p>
     <div class="btns">
-      <a class="btn" href={jarPath} download>⬇ Download Pixel Dungeon .jar</a>
-      <a class="btn" href="/games/pixel-dungeon/">Open launcher-pagina</a>
+      <a class="btn" href={playUrl}>Open full-page</a>
     </div>
   </section>
 
-  <section class="card setup-card">
-    <h2>Startcommando (Linux / server)</h2>
-    <pre><code>java -jar desktop-1.7.2a-1.jar</code></pre>
-    <p class="muted">
-      Plaats Java (bijv. OpenJDK 8+) op je machine en start de game vanuit de map
-      <code>public/games/pixel-dungeon/</code> of vanuit de uitgepakte deploy map.
-    </p>
+  <section class="card game-card">
+    <h2>Speel direct</h2>
+    <div class="game-wrap">
+      <iframe
+        title="Pixel Dungeon in-browser"
+        src={playUrl}
+        loading="lazy"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p class="muted">Tip: klik eerst in het spelvenster voor toetsenbordfocus.</p>
   </section>
 
   <section class="card setup-card">
-    <h2>Wat is aangepast</h2>
+    <h2>Techniek</h2>
     <ul>
-      <li>JSPacman en externe embeds volledig verwijderd.</li>
-      <li>Arcade draait nu op jouw eigen geuploade Pixel Dungeon jar.</li>
-      <li>Launcher + directe download op je eigen domein.</li>
+      <li>Gamebestand wordt geserveerd vanaf <code>/games/pixel-dungeon/</code>.</li>
+      <li>De web-launcher start de Java-game in-browser (zonder lokale installatieflow).</li>
+      <li>Fallback: open de game full-page via de knop hierboven.</li>
     </ul>
   </section>
 </Base>
 
 <style>
   .arcade-hero,
+  .game-card,
   .setup-card {
     margin-top: 18px;
   }
@@ -51,13 +55,25 @@ const jarPath = "/games/pixel-dungeon/desktop-1.7.2a-1.jar";
     margin: 10px 0;
   }
 
+  .game-card,
   .setup-card {
     display: grid;
     gap: 12px;
   }
 
-  pre {
-    margin: 0;
+  .game-wrap {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0a0a0f;
+  }
+
+  .game-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 
   ul {
