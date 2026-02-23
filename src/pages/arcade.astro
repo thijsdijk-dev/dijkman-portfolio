@@ -1,86 +1,68 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const solarusEmbedUrl = "https://www.solarus-games.org/";
-const zeldaFanGameEmbedUrl =
-  "https://archive.org/embed/softwarelibrary_nes?ui=embed&playlist=1&start=Legend_of_Zelda_-_Outlands_The_1996";
+const pixelDungeonUrl = "/games/pixel-dungeon/";
 ---
 
 <Base
-  title="Arcade: Solarus & Zelda fan game"
-  description="Draai Solarus en een Zelda fan game direct op de arcadepagina."
+  title="Arcade: Pixel Dungeon"
+  description="Speel Pixel Dungeon via je eigen server op dijkman.dev."
 >
-  <section class="card hero">
-    <p class="badge">Arcade collectie</p>
-    <h1>Solarus + Zelda fan game</h1>
+  <section class="hero arcade-hero">
+    <p class="badge">Arcade</p>
+    <h1>Pixel Dungeon</h1>
     <p>
-      Op deze pagina draaien nu twee embedded items: <strong>Solarus</strong> en een
-      <strong>Zelda fan game</strong>. Beide zijn direct op de pagina ingesloten.
+      Deze pagina is nu ingericht voor één game: <strong>Pixel Dungeon</strong>.
+      De game wordt geladen vanaf je <strong>eigen serverpad</strong>
+      <code>{pixelDungeonUrl}</code>, zodat je niet afhankelijk bent van externe embeds.
     </p>
-    <p class="note">Tip: klik eerst in het spelvenster om toetsenbordbesturing te activeren.</p>
+    <div class="btns">
+      <a class="btn" href={pixelDungeonUrl} target="_blank" rel="noreferrer">Start in nieuw tabblad</a>
+      <a class="btn" href={pixelDungeonUrl}>Open full-page op deze site</a>
+    </div>
   </section>
 
-  <section class="game-grid">
-    <article class="card game-card">
-      <h2>Solarus</h2>
-      <div class="game-wrap">
-        <iframe
-          title="Solarus website"
-          src={solarusEmbedUrl}
-          frameborder="0"
-          webkitallowfullscreen="true"
-          mozallowfullscreen="true"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <p class="note">Bron: officiële Solarus website.</p>
-    </article>
+  <section class="card game-card">
+    <h2>Ingesloten gamevenster</h2>
+    <p class="muted">
+      Als de game nog niet zichtbaar is, controleer of de Pixel Dungeon webbuild op
+      <code>/public/games/pixel-dungeon/</code> staat op je server.
+    </p>
 
-    <article class="card game-card">
-      <h2>Zelda fan game (Outlands)</h2>
-      <div class="game-wrap">
-        <iframe
-          title="Zelda fan game emulator"
-          src={zeldaFanGameEmbedUrl}
-          frameborder="0"
-          webkitallowfullscreen="true"
-          mozallowfullscreen="true"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <p class="note">Bron: Internet Archive NES fan project / ROM-hack collectie.</p>
-    </article>
+    <div class="game-wrap">
+      <iframe
+        title="Pixel Dungeon"
+        src={pixelDungeonUrl}
+        loading="lazy"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </section>
+
+  <section class="card setup-card">
+    <h2>Server-checklist</h2>
+    <ul>
+      <li>Host de Pixel Dungeon webbuild op <code>/games/pixel-dungeon/</code>.</li>
+      <li>Zorg dat alle assets relatief laden vanuit die map.</li>
+      <li>Test eerst direct op <code>/games/pixel-dungeon/</code>, daarna via <code>/arcade</code>.</li>
+    </ul>
   </section>
 </Base>
 
 <style>
-  .card {
-    background: #101018;
-    border: 1px solid #2d2d3c;
-    border-radius: 16px;
-    padding: 20px;
+  .arcade-hero,
+  .game-card,
+  .setup-card {
     margin-top: 18px;
   }
 
-  .badge {
-    display: inline-block;
-    font-size: 12px;
-    border: 1px solid #4f4f6a;
-    border-radius: 999px;
-    padding: 4px 10px;
-  }
-
-  .hero h1 {
+  .arcade-hero h1 {
     margin: 10px 0;
   }
 
-  .game-grid {
-    display: grid;
-    gap: 18px;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  }
-
-  .game-card {
+  .game-card,
+  .setup-card {
     display: grid;
     gap: 12px;
   }
@@ -88,7 +70,7 @@ const zeldaFanGameEmbedUrl =
   .game-wrap {
     aspect-ratio: 16 / 10;
     width: 100%;
-    border: 1px solid #2a2a38;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     overflow: hidden;
     background: #0a0a0f;
@@ -100,7 +82,10 @@ const zeldaFanGameEmbedUrl =
     border: 0;
   }
 
-  .note {
-    opacity: 0.84;
+  ul {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 8px;
   }
 </style>
