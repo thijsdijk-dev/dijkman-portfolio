@@ -3,20 +3,31 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pixel Dungeon placeholder</title>
+    <title>Pixel Dungeon launcher</title>
     <style>
       body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b0b0f;color:#f2f2f7;font-family:ui-sans-serif,system-ui}
-      .card{max-width:760px;padding:24px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#101018}
+      .card{width:min(860px,92vw);padding:24px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#101018}
+      .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+      .btn{padding:10px 12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;text-decoration:none;color:inherit}
+      .btn:hover{border-color:rgba(255,255,255,.5)}
       code{background:#0b1220;padding:2px 6px;border-radius:8px}
-      a{color:inherit}
+      .muted{opacity:.85}
+      pre{background:#0b1220;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);overflow:auto}
     </style>
   </head>
   <body>
     <div class="card">
-      <h1>Pixel Dungeon webbuild nog niet geplaatst</h1>
-      <p>Zet de gamebestanden van Pixel Dungeon in deze map: <code>public/games/pixel-dungeon/</code>.</p>
-      <p>Vervang daarna dit <code>index.html</code> bestand met de echte game-entrypoint.</p>
-      <p><a href="/arcade">Terug naar /arcade</a></p>
+      <h1>Pixel Dungeon launcher</h1>
+      <p>Deze game draait vanaf je eigen serverbestand: <code>desktop-1.7.2a-1.jar</code>.</p>
+
+      <div class="btns">
+        <a class="btn" href="/games/pixel-dungeon/desktop-1.7.2a-1.jar" download>⬇ Download .jar</a>
+        <a class="btn" href="/arcade">← Terug naar /arcade</a>
+      </div>
+
+      <h2>Start lokaal</h2>
+      <pre><code>java -jar desktop-1.7.2a-1.jar</code></pre>
+      <p class="muted">Werkt op systemen met Java (OpenJDK/JRE). In een browser kun je een desktop jar niet direct als game renderen zoals HTML5.</p>
     </div>
   </body>
 </html>
