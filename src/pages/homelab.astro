@@ -141,19 +141,66 @@ const stats = [
 
   <Section id="security" title="Security">
     <div class="grid">
-      <Card title="Ingress beperken">
-        Alleen 80/443 publiek. Services blijven intern achter de reverse proxy.
+      <Card title="UFW firewall (default deny)">
+        Publiek alleen <code>80/tcp</code> en <code>443/tcp</code>. SSH staat op allowlist via LAN/VPN en alle overige inkomende poorten zijn standaard geblokkeerd.
       </Card>
-      <Card title="SSH key-only">
-        GitHub Actions deploy key is separaat, beperkt en zonder password login.
+      <Card title="Fail2ban voor SSH">
+        Jail <code>sshd</code> actief met <code>bantime</code>, <code>findtime</code> en <code>maxretry</code> policy zodat brute-force pogingen automatisch geblokkeerd worden.
       </Card>
-      <Card title="TLS correctheid">
-        Cert SAN moet matchen met hostnames (apex + eventueel wildcard).
+      <Card title="sshd hardening">
+        Alleen key-based login, <code>PasswordAuthentication no</code>, <code>PermitRootLogin no</code>, en beperkt aantal auth pogingen met <code>MaxAuthTries</code>.
       </Card>
-      <Card title="Hardening ideeën">
-        Fail2ban, SSH rate limiting, automatische updates, backups.
+      <Card title="Verdediging in lagen">
+        Firewall + fail2ban + hardened SSH + TLS + backups. Daardoor blijft de attack surface klein en herstelbaar.
       </Card>
     </div>
+
+    <Card title="Configuratie-overzicht (actieve baseline)">
+      <CodeBlock
+        title="/etc/ufw/applications & policies"
+        code={`sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+# SSH alleen vanaf trusted netwerk (voorbeeld):
+sudo ufw allow from 192.168.0.0/16 to any port 22 proto tcp
+sudo ufw enable`}
+      />
+
+      <CodeBlock
+        title="/etc/fail2ban/jail.d/sshd.local"
+        code={`[sshd]
+enabled = true
+backend = systemd
+port = 22
+maxretry = 5
+findtime = 10m
+bantime = 1h`}
+      />
+
+      <CodeBlock
+        title="/etc/ssh/sshd_config.d/hardening.conf"
+        code={`PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+MaxAuthTries 3
+LoginGraceTime 30
+X11Forwarding no
+AllowTcpForwarding no`}
+      />
+    </Card>
+
+    <Card title="Validatie checks (runbook)">
+      <CodeBlock
+        title="Health checks"
+        code={`sudo ufw status verbose
+sudo fail2ban-client status
+sudo fail2ban-client status sshd
+sudo sshd -t
+sudo systemctl status ssh --no-pager`}
+      />
+    </Card>
   </Section>
 
   <Section id="ops" title="Beheer & monitoring">
@@ -193,7 +240,7 @@ const stats = [
       items={[
         { text: "Uptime Kuma toegevoegd + status badge op /homelab", done: true },
         { text: "Backups: NPM data + dist + compose naar externe storage", done: true },
-        { text: "Fail2ban + sshd hardening + firewall (ufw) baseline", done: false },
+        { text: "Fail2ban + sshd hardening + firewall (ufw) baseline", done: true },
         { text: "Infra repo: docker-compose.yml + README met recovery steps", done: false },
       ]}
     />
