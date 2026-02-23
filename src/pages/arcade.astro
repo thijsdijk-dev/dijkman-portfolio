@@ -1,106 +1,69 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const solarusEmbedUrl = "https://www.solarus-games.org/";
-const zeldaFanGameEmbedUrl =
-  "https://archive.org/embed/softwarelibrary_nes?ui=embed&playlist=1&start=Legend_of_Zelda_-_Outlands_The_1996";
+const jarPath = "/games/pixel-dungeon/desktop-1.7.2a-1.jar";
 ---
 
 <Base
-  title="Arcade: Solarus & Zelda fan game"
-  description="Draai Solarus en een Zelda fan game direct op de arcadepagina."
+  title="Arcade: Pixel Dungeon"
+  description="Pixel Dungeon launcher vanaf je eigen server (desktop JAR)."
 >
-  <section class="card hero">
-    <p class="badge">Arcade collectie</p>
-    <h1>Solarus + Zelda fan game</h1>
+  <section class="hero arcade-hero">
+    <p class="badge">Arcade</p>
+    <h1>Pixel Dungeon (self-hosted)</h1>
     <p>
-      Op deze pagina draaien nu twee embedded items: <strong>Solarus</strong> en een
-      <strong>Zelda fan game</strong>. Beide zijn direct op de pagina ingesloten.
+      Je gamebestand staat op je eigen server als
+      <code>desktop-1.7.2a-1.jar</code>. Omdat dit een desktop Java build is,
+      draait de game stabiel als lokale app (niet als HTML5 iframe).
     </p>
-    <p class="note">Tip: klik eerst in het spelvenster om toetsenbordbesturing te activeren.</p>
+    <div class="btns">
+      <a class="btn" href={jarPath} download>⬇ Download Pixel Dungeon .jar</a>
+      <a class="btn" href="/games/pixel-dungeon/">Open launcher-pagina</a>
+    </div>
   </section>
 
-  <section class="game-grid">
-    <article class="card game-card">
-      <h2>Solarus</h2>
-      <div class="game-wrap">
-        <iframe
-          title="Solarus website"
-          src={solarusEmbedUrl}
-          frameborder="0"
-          webkitallowfullscreen="true"
-          mozallowfullscreen="true"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <p class="note">Bron: officiële Solarus website.</p>
-    </article>
+  <section class="card setup-card">
+    <h2>Startcommando (Linux / server)</h2>
+    <pre><code>java -jar desktop-1.7.2a-1.jar</code></pre>
+    <p class="muted">
+      Plaats Java (bijv. OpenJDK 8+) op je machine en start de game vanuit de map
+      <code>public/games/pixel-dungeon/</code> of vanuit de uitgepakte deploy map.
+    </p>
+  </section>
 
-    <article class="card game-card">
-      <h2>Zelda fan game (Outlands)</h2>
-      <div class="game-wrap">
-        <iframe
-          title="Zelda fan game emulator"
-          src={zeldaFanGameEmbedUrl}
-          frameborder="0"
-          webkitallowfullscreen="true"
-          mozallowfullscreen="true"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <p class="note">Bron: Internet Archive NES fan project / ROM-hack collectie.</p>
-    </article>
+  <section class="card setup-card">
+    <h2>Wat is aangepast</h2>
+    <ul>
+      <li>JSPacman en externe embeds volledig verwijderd.</li>
+      <li>Arcade draait nu op jouw eigen geuploade Pixel Dungeon jar.</li>
+      <li>Launcher + directe download op je eigen domein.</li>
+    </ul>
   </section>
 </Base>
 
 <style>
-  .card {
-    background: #101018;
-    border: 1px solid #2d2d3c;
-    border-radius: 16px;
-    padding: 20px;
+  .arcade-hero,
+  .setup-card {
     margin-top: 18px;
   }
 
-  .badge {
-    display: inline-block;
-    font-size: 12px;
-    border: 1px solid #4f4f6a;
-    border-radius: 999px;
-    padding: 4px 10px;
-  }
-
-  .hero h1 {
+  .arcade-hero h1 {
     margin: 10px 0;
   }
 
-  .game-grid {
-    display: grid;
-    gap: 18px;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  }
-
-  .game-card {
+  .setup-card {
     display: grid;
     gap: 12px;
   }
 
-  .game-wrap {
-    aspect-ratio: 16 / 10;
-    width: 100%;
-    border: 1px solid #2a2a38;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #0a0a0f;
+  pre {
+    margin: 0;
   }
 
-  .game-wrap iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-
-  .note {
-    opacity: 0.84;
+  ul {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 8px;
   }
 </style>
