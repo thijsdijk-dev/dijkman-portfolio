@@ -33,6 +33,29 @@ const pixelDungeonUrl = "/games/pixel-dungeon/";
       <iframe
         title="Pixel Dungeon"
         src={pixelDungeonUrl}
+const jsPacmanEmbedUrl = "https://henriquejr.github.io/jspacman/";
+---
+
+<Base
+  title="Arcade: JSPacman"
+  description="Speel JSPacman direct op de arcadepagina van dijkman.dev."
+>
+  <section class="hero arcade-hero">
+    <p class="badge">Arcade</p>
+    <h1>JSPacman</h1>
+    <p>
+      De arcadepagina is volledig vernieuwd en draait nu nog maar één game:
+      <strong>JSPacman</strong>. Zelfde donkere stijl, zelfde navigatie, direct speelbaar.
+    </p>
+    <p class="muted">Tip: klik eerst in het spelvenster om toetsenbordbesturing te activeren.</p>
+  </section>
+
+  <section class="card game-card">
+    <h2>Speel nu</h2>
+    <div class="game-wrap">
+      <iframe
+        title="JSPacman"
+        src={jsPacmanEmbedUrl}
         loading="lazy"
         frameborder="0"
         allowfullscreen
@@ -54,6 +77,7 @@ const pixelDungeonUrl = "/games/pixel-dungeon/";
   .arcade-hero,
   .game-card,
   .setup-card {
+  .arcade-hero {
     margin-top: 18px;
   }
 
@@ -63,6 +87,8 @@ const pixelDungeonUrl = "/games/pixel-dungeon/";
 
   .game-card,
   .setup-card {
+  .game-card {
+    margin-top: 18px;
     display: grid;
     gap: 12px;
   }
