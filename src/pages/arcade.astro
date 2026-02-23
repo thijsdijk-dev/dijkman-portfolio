@@ -1,45 +1,62 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const playUrl = "/games/pixel-dungeon/play.html";
+const streamUrl = "http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=scale";
 ---
 
 <Base
-  title="Arcade: Pixel Dungeon"
-  description="Speel Pixel Dungeon direct in je browser vanaf je eigen server."
+  title="Arcade: Pixel Dungeon op je eigen server"
+  description="Draai Pixel Dungeon vanaf je eigen systeem en embed de live sessie in je website."
 >
   <section class="hero arcade-hero">
     <p class="badge">Arcade</p>
-    <h1>Pixel Dungeon</h1>
+    <h1>Pixel Dungeon vanaf je eigen server</h1>
     <p>
-      Deze pagina start Pixel Dungeon nu <strong>direct in de browser</strong> via je eigen
-      serverpad. Je hoeft niets te downloaden om te spelen.
+      Je gevoel klopt: de originele Pixel Dungeon draait niet als gewone HTML-app. De meest
+      praktische manier om deze <strong>toch embedded</strong> op je site te tonen, is de game
+      lokaal op je server starten en het venster streamen naar de browser.
     </p>
     <div class="btns">
-      <a class="btn" href={playUrl}>Open full-page</a>
+      <a class="btn" href={streamUrl} target="_blank" rel="noreferrer">Open noVNC full-page</a>
     </div>
   </section>
 
   <section class="card game-card">
-    <h2>Speel direct</h2>
+    <h2>Live embed (noVNC)</h2>
     <div class="game-wrap">
       <iframe
-        title="Pixel Dungeon in-browser"
-        src={playUrl}
+        title="Pixel Dungeon via noVNC"
+        src={streamUrl}
         loading="lazy"
         frameborder="0"
         allowfullscreen
       ></iframe>
     </div>
-    <p class="muted">Tip: klik eerst in het spelvenster voor toetsenbordfocus.</p>
+    <p class="muted">
+      Deze iframe werkt zodra je noVNC op poort 6080 draait en daar je Pixel Dungeon sessie achter
+      hangt.
+    </p>
   </section>
 
   <section class="card setup-card">
-    <h2>Techniek</h2>
+    <h2>Aanpak op je server</h2>
+    <ol>
+      <li>Start een lichte desktop sessie (bijv. Xfce) op je server.</li>
+      <li>Run Pixel Dungeon in Java/Android-emulator binnen die sessie.</li>
+      <li>Expose de sessie via VNC + noVNC (websocket proxy).</li>
+      <li>Embed de noVNC URL in je website met een iframe zoals hierboven.</li>
+    </ol>
+  </section>
+
+  <section class="card setup-card">
+    <h2>Belangrijke notitie</h2>
     <ul>
-      <li>Gamebestand wordt geserveerd vanaf <code>/games/pixel-dungeon/</code>.</li>
-      <li>De web-launcher start de Java-game in-browser (zonder lokale installatieflow).</li>
-      <li>Fallback: open de game full-page via de knop hierboven.</li>
+      <li>Performance hangt af van server CPU/GPU en netwerk-latency.</li>
+      <li>Zet authenticatie op noVNC (wachtwoord + reverse proxy + HTTPS).</li>
+      <li>
+        Wil je pure browser-uitvoering zonder streaming, dan heb je een specifieke web-port nodig
+        (bijv. GDX/WebAssembly build van een Pixel Dungeon fork).
+      </li>
     </ul>
   </section>
 </Base>
@@ -76,7 +93,8 @@ const playUrl = "/games/pixel-dungeon/play.html";
     border: 0;
   }
 
-  ul {
+  ul,
+  ol {
     margin: 0;
     padding-left: 18px;
     display: grid;
