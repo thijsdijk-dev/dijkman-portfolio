@@ -1,70 +1,43 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const streamUrl = "http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=scale";
+const retrisUrl = "/retris/index.html";
 ---
 
 <Base
-  title="Arcade: Pixel Dungeon op je eigen server"
-  description="Draai Pixel Dungeon vanaf je eigen systeem en embed de live sessie in je website."
+  title="Arcade: Retris"
+  description="Speel Retris direct vanaf deze website."
 >
   <section class="hero arcade-hero">
     <p class="badge">Arcade</p>
-    <h1>Pixel Dungeon vanaf je eigen server</h1>
+    <h1>Speel Retris op mijn website</h1>
     <p>
-      Je gevoel klopt: de originele Pixel Dungeon draait niet als gewone HTML-app. De meest
-      praktische manier om deze <strong>toch embedded</strong> op je site te tonen, is de game
-      lokaal op je server starten en het venster streamen naar de browser.
+      De arcade-pagina is nu volledig gericht op <strong>Retris</strong>. Eerdere game-opstellingen
+      zijn vervallen.
     </p>
     <div class="btns">
-      <a class="btn" href={streamUrl} target="_blank" rel="noreferrer">Open noVNC full-page</a>
+      <a class="btn" href={retrisUrl} target="_blank" rel="noreferrer">Open Retris fullscreen</a>
     </div>
   </section>
 
   <section class="card game-card">
-    <h2>Live embed (noVNC)</h2>
+    <h2>Live embed</h2>
     <div class="game-wrap">
       <iframe
-        title="Pixel Dungeon via noVNC"
-        src={streamUrl}
+        title="Retris"
+        src={retrisUrl}
         loading="lazy"
         frameborder="0"
         allowfullscreen
       ></iframe>
     </div>
-    <p class="muted">
-      Deze iframe werkt zodra je noVNC op poort 6080 draait en daar je Pixel Dungeon sessie achter
-      hangt.
-    </p>
-  </section>
-
-  <section class="card setup-card">
-    <h2>Aanpak op je server</h2>
-    <ol>
-      <li>Start een lichte desktop sessie (bijv. Xfce) op je server.</li>
-      <li>Run Pixel Dungeon in Java/Android-emulator binnen die sessie.</li>
-      <li>Expose de sessie via VNC + noVNC (websocket proxy).</li>
-      <li>Embed de noVNC URL in je website met een iframe zoals hierboven.</li>
-    </ol>
-  </section>
-
-  <section class="card setup-card">
-    <h2>Belangrijke notitie</h2>
-    <ul>
-      <li>Performance hangt af van server CPU/GPU en netwerk-latency.</li>
-      <li>Zet authenticatie op noVNC (wachtwoord + reverse proxy + HTTPS).</li>
-      <li>
-        Wil je pure browser-uitvoering zonder streaming, dan heb je een specifieke web-port nodig
-        (bijv. GDX/WebAssembly build van een Pixel Dungeon fork).
-      </li>
-    </ul>
+    <p class="muted">Retris draait lokaal op deze site via <code>/retris/index.html</code>.</p>
   </section>
 </Base>
 
 <style>
   .arcade-hero,
-  .game-card,
-  .setup-card {
+  .game-card {
     margin-top: 18px;
   }
 
@@ -72,8 +45,7 @@ const streamUrl = "http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=scale"
     margin: 10px 0;
   }
 
-  .game-card,
-  .setup-card {
+  .game-card {
     display: grid;
     gap: 12px;
   }
@@ -91,13 +63,5 @@ const streamUrl = "http://127.0.0.1:6080/vnc.html?autoconnect=true&resize=scale"
     width: 100%;
     height: 100%;
     border: 0;
-  }
-
-  ul,
-  ol {
-    margin: 0;
-    padding-left: 18px;
-    display: grid;
-    gap: 8px;
   }
 </style>
