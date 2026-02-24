@@ -16,45 +16,33 @@
 
 <script>
 (async () => {
-  // >>> PAS DIT AAN AAN JOUW SITUATIE <<<
-  const CORE_NAME = "Snes9x"; // probeer ook "Beetle SNES", "bsnes", afhankelijk van je build
-  const ROM_URL   = "/retroarch/roms/sure-instinct.sfc"; // zet hier jouw .sfc neer
+  const CORE_NAME = "Snes9x";
+  const ROM_URL   = "/retroarch/roms/test.sfc";
 
   const msg = (t) => document.getElementById("msg").textContent = t;
 
-  // 1) ROM check (vriendelijke fout ipv leeg/zwart scherm)
   try {
     const r = await fetch(ROM_URL, { method: "HEAD" });
-    if (!r.ok) {
-      msg(`ROM niet gevonden (${r.status}). Zet een SNES ROM neer op: ${ROM_URL}`);
-      return;
-    }
+    if (!r.ok) { msg(`ROM niet gevonden (${r.status}): ${ROM_URL}`); return; }
   } catch (e) {
-    msg(`Kan ROM niet checken. Bestaat deze URL? ${ROM_URL}`);
-    return;
+    msg(`Kan ROM niet checken: ${ROM_URL}`); return;
   }
 
-  // 2) Zet meerdere keys, omdat de web-launcher per build kan verschillen
   const payload = { core: CORE_NAME, rom: ROM_URL, system: "snes" };
-  const candidates = [
-    "retroarch.launch", "retroarch.launcher", "ra.launch", "ra.web.launch",
-    "selectedCore", "selected_core", "core", "ra_core", "libretro_core",
-    "selectedContent", "selected_content", "content", "ra_content"
+  const keys = [
+    "retroarch.launch","retroarch.launcher","ra.launch","ra.web.launch",
+    "selectedCore","selected_core","core","ra_core","libretro_core",
+    "selectedContent","selected_content","content","ra_content"
   ];
-  for (const k of candidates) {
-    try { localStorage.setItem(k, JSON.stringify(payload)); } catch {}
-  }
-
-  // Ook plain string varianten (sommige launchers verwachten dat)
+  for (const k of keys) { try { localStorage.setItem(k, JSON.stringify(payload)); } catch {} }
   try { localStorage.setItem("core", CORE_NAME); } catch {}
   try { localStorage.setItem("content", ROM_URL); } catch {}
 
-  // 3) Redirect naar RetroArch root
   msg("Doorsturen naar RetroArch…");
   location.href = "/retroarch/";
 })();
 </script>
 
-  <p class="muted">Als het niet direct start: open <code>/retroarch/</code>, kies de SNES core en laad de ROM uit <code>/retroarch/roms/</code>. Daarna werkt one-click meestal wél (cache/config is dan gezet).</p>
+  <p class="muted">Als het niet direct start: ga naar <code>/retroarch/</code> → Load Core (SNES) → Load Content → <code>/retroarch/roms/test.sfc</code>.</p>
 </body>
 </html>
