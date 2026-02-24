@@ -2,36 +2,54 @@
 import Base from "../layouts/Base.astro";
 
 const retrisUrl = "/retris/index.html";
+const breakoutUrl = "/breakout/index.html";
 ---
 
 <Base
-  title="Arcade: Retris"
-  description="Speel Retris direct vanaf deze website."
+  title="Arcade: Retris & Breakout"
+  description="Speel Retris en Breakout direct vanaf deze website."
 >
   <section class="hero arcade-hero">
     <p class="badge">Arcade</p>
-    <h1>Speel Retris op mijn website</h1>
+    <h1>Speel Retris en Breakout op mijn website</h1>
     <p>
-      De arcade-pagina is nu volledig gericht op <strong>Retris</strong>. Eerdere game-opstellingen
-      zijn vervallen.
+      Op deze pagina vind je twee games: <strong>Retris</strong> en <strong>Breakout</strong>.
+      Beide zijn direct speelbaar vanuit de browser.
     </p>
     <div class="btns">
       <a class="btn" href={retrisUrl} target="_blank" rel="noreferrer">Open Retris fullscreen</a>
+      <a class="btn secondary" href={breakoutUrl} target="_blank" rel="noreferrer">Open Breakout fullscreen</a>
     </div>
   </section>
 
-  <section class="card game-card">
-    <h2>Live embed</h2>
-    <div class="game-wrap">
-      <iframe
-        title="Retris"
-        src={retrisUrl}
-        loading="lazy"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
-    </div>
-    <p class="muted">Retris draait lokaal op deze site via <code>/retris/index.html</code>.</p>
+  <section class="games-grid">
+    <article class="card game-card">
+      <h2>Retris</h2>
+      <div class="game-wrap">
+        <iframe
+          title="Retris"
+          src={retrisUrl}
+          loading="lazy"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <p class="muted">Retris draait lokaal op deze site via <code>/retris/index.html</code>.</p>
+    </article>
+
+    <article class="card game-card">
+      <h2>Breakout</h2>
+      <div class="game-wrap">
+        <iframe
+          title="Breakout"
+          src={breakoutUrl}
+          loading="lazy"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <p class="muted">Breakout is beschikbaar op <code>/breakout/index.html</code>.</p>
+    </article>
   </section>
 </Base>
 
@@ -48,6 +66,19 @@ const retrisUrl = "/retris/index.html";
   .game-card {
     display: grid;
     gap: 12px;
+  }
+
+  .games-grid {
+    margin-top: 18px;
+    display: grid;
+    gap: 16px;
+  }
+
+  @media (min-width: 1100px) {
+    .games-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
   }
 
   .game-wrap {
