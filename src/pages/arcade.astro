@@ -2,66 +2,85 @@
 import Base from "../layouts/Base.astro";
 
 const retrisUrl = "/retris/index.html";
+const breakoutUrl = "/breakout/index.html";
 ---
 
 <Base
-  title="Arcade: Retris"
-  description="Speel Retris direct vanaf deze website."
+  title="Arcade"
+  description="Start Retris of Breakout fullscreen vanaf deze arcade-pagina."
 >
   <section class="hero arcade-hero">
     <p class="badge">Arcade</p>
-    <h1>Speel Retris op mijn website</h1>
+    <h1>Arcade games in fullscreen</h1>
     <p>
-      De arcade-pagina is nu volledig gericht op <strong>Retris</strong>. Eerdere game-opstellingen
-      zijn vervallen.
+      Voor de beste ervaring starten de games in een nieuw tabblad op fullscreen formaat.
+      Kies hieronder je game en speel direct.
     </p>
-    <div class="btns">
-      <a class="btn" href={retrisUrl} target="_blank" rel="noreferrer">Open Retris fullscreen</a>
-    </div>
   </section>
 
-  <section class="card game-card">
-    <h2>Live embed</h2>
-    <div class="game-wrap">
-      <iframe
-        title="Retris"
-        src={retrisUrl}
-        loading="lazy"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
-    </div>
-    <p class="muted">Retris draait lokaal op deze site via <code>/retris/index.html</code>.</p>
+  <section class="games-grid">
+    <article class="card game-card">
+      <p class="game-kicker">Game 01</p>
+      <h2>Retris</h2>
+      <p class="muted">
+        Klassieke block-stacking gameplay. Start direct in een aparte pagina zonder embed.
+      </p>
+      <a class="btn" href={retrisUrl} target="_blank" rel="noreferrer">Start Retris fullscreen</a>
+    </article>
+
+    <article class="card game-card">
+      <p class="game-kicker">Game 02</p>
+      <h2>Breakout</h2>
+      <p class="muted">
+        Vernieuwde Breakout met rustiger bal-snelheid voor een beter speelbaar niveau.
+      </p>
+      <a class="btn" href={breakoutUrl} target="_blank" rel="noreferrer">Start Breakout fullscreen</a>
+    </article>
   </section>
 </Base>
 
 <style>
-  .arcade-hero,
-  .game-card {
+  .arcade-hero {
     margin-top: 18px;
+    max-width: 72ch;
   }
 
   .arcade-hero h1 {
     margin: 10px 0;
   }
 
+  .games-grid {
+    margin-top: 18px;
+    display: grid;
+    gap: 16px;
+  }
+
   .game-card {
     display: grid;
     gap: 12px;
+    align-content: start;
   }
 
-  .game-wrap {
-    aspect-ratio: 16 / 10;
-    width: 100%;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    overflow: hidden;
-    background: #0a0a0f;
+  .game-kicker {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
   }
 
-  .game-wrap iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
+  .game-card h2 {
+    margin: 0;
+  }
+
+  .game-card .btn {
+    width: fit-content;
+    margin-top: 4px;
+  }
+
+  @media (min-width: 960px) {
+    .games-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 </style>
