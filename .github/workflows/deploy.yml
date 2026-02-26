@@ -61,8 +61,17 @@ jobs:
 
             sleep 3
 
+            docker exec portfolio sh -lc 'nginx -t'
+
             if docker ps --format '{{.Names}}' | grep -q '^npm$'; then
-              docker exec npm sh -lc 'wget -qO- http://portfolio:80/ >/dev/null'
+              if docker exec npm sh -lc 'command -v wget >/dev/null 2>&1'; then
+                docker exec npm sh -lc 'wget -qO- http://portfolio:80/ >/dev/null'
+              elif docker exec npm sh -lc 'command -v curl >/dev/null 2>&1'; then
+                docker exec npm sh -lc 'curl -fsS http://portfolio:80/ >/dev/null'
+              else
+                docker run --rm --network proxy curlimages/curl:8.12.1 -fsS http://portfolio:80/ >/dev/null
+              fi
             else
-              echo "NPM container not found; skipping internal upstream check."
+              echo "NPM container not found; using temporary curl container on proxy network."
+              docker run --rm --network proxy curlimages/curl:8.12.1 -fsS http://portfolio:80/ >/dev/null
             fi
