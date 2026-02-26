@@ -2,7 +2,8 @@ name: Deploy to Pi
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -32,3 +33,36 @@ jobs:
           source: "dist/**"
           target: "/home/naruto/dijkman-portfolio/dist"
           strip_components: 1
+
+      - name: Reload portfolio service and validate upstream
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            APP_DIR="/home/naruto/dijkman-portfolio"
+            COMPOSE_FILE="$APP_DIR/docker-compose.yml"
+
+            if [ -f "$COMPOSE_FILE" ]; then
+              cd "$APP_DIR"
+              if docker compose version >/dev/null 2>&1; then
+                docker compose up -d portfolio
+              else
+                docker-compose up -d portfolio
+              fi
+            elif docker ps -a --format '{{.Names}}' | grep -q '^portfolio$'; then
+              docker restart portfolio
+            else
+              echo "Portfolio service not found (no compose file and no portfolio container)."
+              exit 1
+            fi
+
+            sleep 3
+
+            if docker ps --format '{{.Names}}' | grep -q '^npm$'; then
+              docker exec npm sh -lc 'wget -qO- http://portfolio:80/ >/dev/null'
+            else
+              echo "NPM container not found; skipping internal upstream check."
+            fi
