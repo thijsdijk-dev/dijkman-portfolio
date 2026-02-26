@@ -1,41 +1,29 @@
 ---
 import Base from "../layouts/Base.astro";
 
-const retrisUrl = "/retris/index.html";
-const breakoutUrl = "/breakout/index.html";
+const retroarchUrl = "https://web.libretro.com/";
 ---
 
 <Base
-  title="Arcade"
-  description="Start Retris of Breakout fullscreen vanaf deze arcade-pagina."
+  title="Arcade (RetroArch)"
+  description="Start RetroArch direct vanuit de nieuwe arcade-pagina."
 >
   <section class="hero arcade-hero">
     <p class="badge">Arcade</p>
-    <h1>Arcade games in fullscreen</h1>
+    <h1>RetroArch is de nieuwe Arcade</h1>
     <p>
-      Voor de beste ervaring starten de games in een nieuw tabblad op fullscreen formaat.
-      Kies hieronder je game en speel direct.
+      De arcade-pagina is nu gericht op RetroArch. Via onderstaande knop open je direct
+      de webversie in een nieuw tabblad.
     </p>
+    <a class="btn" href={retroarchUrl} target="_blank" rel="noreferrer">Open RetroArch</a>
   </section>
 
-  <section class="games-grid">
-    <article class="card game-card">
-      <p class="game-kicker">Game 01</p>
-      <h2>Retris</h2>
-      <p class="muted">
-        Klassieke block-stacking gameplay. Start direct in een aparte pagina zonder embed.
-      </p>
-      <a class="btn" href={retrisUrl} target="_blank" rel="noreferrer">Start Retris fullscreen</a>
-    </article>
-
-    <article class="card game-card">
-      <p class="game-kicker">Game 02</p>
-      <h2>Breakout</h2>
-      <p class="muted">
-        Vernieuwde Breakout met rustiger bal-snelheid voor een beter speelbaar niveau.
-      </p>
-      <a class="btn" href={breakoutUrl} target="_blank" rel="noreferrer">Start Breakout fullscreen</a>
-    </article>
+  <section class="card info-card">
+    <h2>Waarom RetroArch?</h2>
+    <p class="muted">
+      Eén centrale plek voor emulatie met meerdere cores en controller-ondersteuning.
+      Daarmee is dit vanaf nu de standaard arcade-route van de site.
+    </p>
   </section>
 </Base>
 
@@ -43,44 +31,23 @@ const breakoutUrl = "/breakout/index.html";
   .arcade-hero {
     margin-top: 18px;
     max-width: 72ch;
+    display: grid;
+    gap: 14px;
   }
 
   .arcade-hero h1 {
-    margin: 10px 0;
-  }
-
-  .games-grid {
-    margin-top: 18px;
-    display: grid;
-    gap: 16px;
-  }
-
-  .game-card {
-    display: grid;
-    gap: 12px;
-    align-content: start;
-  }
-
-  .game-kicker {
-    margin: 0;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.65);
-  }
-
-  .game-card h2 {
     margin: 0;
   }
 
-  .game-card .btn {
+  .arcade-hero .btn {
     width: fit-content;
-    margin-top: 4px;
   }
 
-  @media (min-width: 960px) {
-    .games-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .info-card {
+    margin-top: 18px;
+  }
+
+  .info-card h2 {
+    margin-top: 0;
   }
 </style>
