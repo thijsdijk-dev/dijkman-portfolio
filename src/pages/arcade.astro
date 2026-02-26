@@ -1,348 +1,206 @@
 ---
 import Base from "../layouts/Base.astro";
 
-// Gebruik je eigen endpoint (past bij je hosting + upload flow)
+// self-hosted endpoints
 const retroarchUrl = "/retroarch/";
 const uploadUrl = "/retroarch/upload/";
 
 const highlights = [
   {
-    icon: "🧩",
     title: "Alles-in-één emulator hub",
-    text: "Laad verschillende consoles via cores in één uniforme interface, zonder losse tools of installers.",
+    text: "Laad verschillende consoles via cores in één uniforme interface, zonder losse tools.",
   },
   {
-    icon: "🎮",
     title: "Controller ready",
-    text: "Gamepads werken direct. Remapping + latency-vriendelijke instellingen voor soepel spelen.",
+    text: "Gamepads worden direct ondersteund, inclusief remapping en latency-optimalisaties.",
   },
   {
-    icon: "💾",
     title: "Savestates & shaders",
-    text: "Bewaar je plek met savestates en geef klassiekers sfeer met CRT/scanlines.",
+    text: "Pauzeer en hervat exact waar je was, en geef klassiekers extra sfeer met filters.",
   },
 ];
 
 const quickSteps = [
-  "Open RetroArch via ‘Start RetroArch’.",
-  "Kies een core die past bij je game (Load Core).",
-  "Laad je ROM via Load Content en start.",
+  "Open RetroArch via de knop hieronder.",
+  "Kies een core die past bij je game.",
+  "Load Content → selecteer je ROM → spelen.",
 ];
 
 const legalRomSteps = [
-  "Gebruik alleen een legale ROM: homebrew, public-domain, of een eigen back-up waar je rechten op hebt.",
-  "Zet de ROM op je apparaat (pc/laptop/telefoon). Bestanden zijn vaak .nes, .gb, .sfc, .smc of .zip.",
-  "In RetroArch: Main Menu → Load Core en kies de juiste core voor jouw platform.",
-  "Main Menu → Load Content → selecteer je ROM → start de game.",
-  "Optioneel: Quick Menu → Save State / Load State. Controls: Settings → Input.",
+  "Gebruik alleen een legale ROM (homebrew, public-domain of je eigen back-up waar je rechten op hebt).",
+  "Zet je ROM op je apparaat (pc/laptop/telefoon). Bestanden zoals .nes, .gb, .sfc of .zip.",
+  "In RetroArch: Main Menu → Load Core en kies de juiste emulator-core.",
+  "Daarna: Main Menu → Load Content → selecteer je ROM → start.",
+  "Optioneel: Quick Menu → Save State, en Settings → Input voor controls.",
 ];
 ---
 
 <Base
   title="Arcade (RetroArch)"
-  description="RetroArch – speel retro games in je browser via jouw eigen web player."
+  description="Start RetroArch direct vanuit de arcade-pagina."
 >
-  <section class="hero arcade-hero">
-    <div class="hero-inner">
-      <div class="hero-copy">
-        <p class="badge arcade-badge">🕹️ Arcade</p>
-        <h1>Retro, maar dan strak</h1>
-        <p class="lead muted">
-          Een snelle launchpad voor <strong>RetroArch Web</strong> op mijn eigen server.
-          Upload je legale ROM, kies een core en speel direct in je browser.
-        </p>
-
-        <div class="btns">
-          <a class="btn primary" href={retroarchUrl}>Start RetroArch</a>
-          <a class="btn" href={uploadUrl}>Upload ROM</a>
-          <a class="btn ghost" href="/">Terug</a>
-        </div>
-
-        <div class="meta muted">
-          <span>Tip: fullscreen via RetroArch menu</span>
-          <span class="dot">•</span>
-          <span>Audio: check tab-audio + focus</span>
-        </div>
-      </div>
-
-      <aside class="card launcher">
-        <div class="launcher-top">
-          <div>
-            <p class="launcher-kicker muted">Snel starten</p>
-            <h2 class="launcher-title">In 30 seconden aan</h2>
-          </div>
-          <span class="pill muted">Web player</span>
-        </div>
-
-        <ol class="steps">
-          {quickSteps.map((step) => (
-            <li>{step}</li>
-          ))}
-        </ol>
-
-        <div class="launcher-actions">
-          <a class="btn primary wide" href={retroarchUrl}>Start RetroArch</a>
-          <a class="btn wide" href={uploadUrl}>Upload ROM</a>
-        </div>
-
-        <p class="hint muted">
-          Gebruik uitsluitend legale ROM’s. Geen downloads via deze pagina.
-        </p>
-      </aside>
+  <section class="hero">
+    <div class="tag-row">
+      <span class="tag">🕹️ Arcade</span>
+      <span class="tag">RetroArch</span>
     </div>
 
-    <div class="glow" aria-hidden="true"></div>
+    <h1>Arcade</h1>
+    <p class="muted lead">
+      Start RetroArch direct in je browser. Kies een core, laad content en je bent weg.
+      Uploaden kan via de ROM-uploader (alleen met token).
+    </p>
+
+    <div class="btns">
+      <a class="btn" href={retroarchUrl}>Start RetroArch</a>
+      <a class="btn" href={uploadUrl}>Upload ROMs</a>
+      <a class="btn" href="/">Terug naar home</a>
+    </div>
+
+    <p class="muted footnote">
+      Tip: als audio niet meteen werkt: klik één keer in het RetroArch-venster en check tab-audio permissies.
+    </p>
   </section>
 
-  <section class="grid arcade-grid">
+  <section class="grid">
     {highlights.map((item) => (
-      <article class="card feature-card">
-        <div class="feature-head">
-          <span class="feature-icon" aria-hidden="true">{item.icon}</span>
-          <h2>{item.title}</h2>
-        </div>
+      <article class="card">
+        <h2>{item.title}</h2>
         <p class="muted">{item.text}</p>
       </article>
     ))}
   </section>
 
-  <section class="grid two">
-    <section class="card info-card">
-      <h2>Handige hints</h2>
-      <ul class="list">
-        <li><strong>Gamepad</strong>: sluit aan vóór je RetroArch start voor de meest stabiele detectie.</li>
-        <li><strong>Performance</strong>: probeer een lichtere core (bv. snes9x2002) als iets hapert.</li>
-        <li><strong>Opslaan</strong>: Save States zijn snel, maar voor “echte saves” blijft in-game save vaak het best.</li>
-      </ul>
-    </section>
+  <section class="card">
+    <h2>Snelle start</h2>
+    <ol>
+      {quickSteps.map((step) => (
+        <li>{step}</li>
+      ))}
+    </ol>
 
-    <section class="card info-card">
-      <h2>ROM upload</h2>
-      <p class="muted">
-        Uploaden gaat via mijn eigen uploader. Daarna kun je de ROM in RetroArch selecteren onder
-        <code>/retroarch/roms/</code>.
-      </p>
-      <div class="btns">
-        <a class="btn" href={uploadUrl}>Open uploader</a>
-        <a class="btn ghost" href={retroarchUrl}>Open RetroArch</a>
+    <details class="details">
+      <summary>ROM upload: hoe werkt dat met token?</summary>
+      <div class="details-body muted">
+        <p>
+          De uploadpagina stuurt bestanden naar <code>/retroarch/upload/api/upload</code>.
+          Je uploader verwacht een header <code>X-Upload-Token</code>.
+        </p>
+        <p>
+          Voor jezelf: je token staat als <code>UPLOAD_TOKEN</code> in de <code>rom-uploader</code> container.
+          Publiceer die token liever niet op je site; behandel ‘m als geheim.
+        </p>
       </div>
-      <p class="muted footnote">
-        Krijg je een fout? Grote bestanden kunnen een server-limiet raken (413).
-      </p>
-    </section>
+    </details>
   </section>
 
-  <section class="card legal-card">
-    <h2>Zo laad je een legale ROM</h2>
+  <section class="card">
+    <h2>Zo laad je een legale ROM in</h2>
     <p class="muted">
-      Gebruik uitsluitend een <strong>legale ROM</strong> waar jij rechten op hebt. Denk aan homebrew,
-      public-domain games of een persoonlijke back-up van een game die je zelf bezit.
+      Gebruik uitsluitend een <strong>legale ROM</strong> waar jij rechten op hebt (homebrew,
+      public-domain of een eigen back-up).
     </p>
-    <ol class="steps">
+    <ol>
       {legalRomSteps.map((step) => (
         <li>{step}</li>
       ))}
     </ol>
 
-    <p class="callout legal-note">
-      Deze pagina moedigt geen illegale downloads aan. Gebruik alleen ROM’s die je zelf mag gebruiken.
+    <p class="callout">
+      Deze pagina moedigt geen illegale downloads aan. Gebruik alleen ROM-bestanden die je legaal mag gebruiken.
     </p>
   </section>
 </Base>
 
 <style>
-  /* Layout */
-  .arcade-hero {
-    position: relative;
-    overflow: hidden;
+  /* match jouw homepage stijl: simpel, strak, dark cards */
+  .hero {
+    padding: 28px;
+    border: 1px solid #222;
+    border-radius: 18px;
+    background: #101018;
     margin-top: 18px;
-    padding: 26px;
-    background:
-      radial-gradient(circle at 85% -20%, rgba(96, 165, 250, 0.25), transparent 45%),
-      radial-gradient(circle at 0% 110%, rgba(244, 114, 182, 0.16), transparent 38%),
-      #101018;
   }
 
-  .hero-inner {
-    display: grid;
-    grid-template-columns: 1.35fr 0.9fr;
-    gap: 18px;
-    align-items: start;
+  .tag-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
   }
 
-  @media (max-width: 980px) {
-    .hero-inner {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .hero-copy {
-    display: grid;
-    gap: 12px;
-  }
-
-  .arcade-badge {
-    width: fit-content;
-    background: rgba(255, 255, 255, 0.03);
+  .tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid #444;
+    border-radius: 999px;
+    font-size: 12px;
+    opacity: 0.9;
   }
 
   h1 {
-    margin: 0;
-    font-size: clamp(1.9rem, 3vw, 2.7rem);
+    margin: 0 0 8px;
+    font-size: 2rem;
     letter-spacing: -0.02em;
   }
 
+  h2 {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+  }
+
   .lead {
-    max-width: 64ch;
-    line-height: 1.65;
     margin: 0;
+    max-width: 70ch;
+    line-height: 1.65;
+  }
+
+  .muted {
+    opacity: 0.8;
   }
 
   .btns {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 6px;
+    margin-top: 14px;
   }
 
-  .primary {
-    background: linear-gradient(120deg, rgba(59, 130, 246, 0.26), rgba(168, 85, 247, 0.28));
-    border-color: rgba(147, 197, 253, 0.55);
-  }
-  .primary:hover { border-color: rgba(196, 181, 253, 0.8); }
-
-  .ghost {
+  .btn {
+    padding: 10px 12px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
     background: transparent;
   }
 
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    font-size: 0.95rem;
-    margin-top: 6px;
-  }
-  .dot { opacity: 0.6; }
-
-  .glow {
-    position: absolute;
-    inset: auto -140px -160px auto;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.26), transparent 62%);
-    pointer-events: none;
+  .btn:hover {
+    border-color: #777;
   }
 
-  /* Launcher card */
-  .launcher {
-    padding: 18px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-    border-color: rgba(255,255,255,0.08);
-  }
-
-  .launcher-top {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-
-  .launcher-kicker { margin: 0; font-size: 0.9rem; }
-  .launcher-title { margin: 2px 0 0; font-size: 1.15rem; }
-
-  .pill {
-    font-size: 0.85rem;
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.10);
-    background: rgba(255,255,255,0.02);
-    white-space: nowrap;
-  }
-
-  .launcher-actions {
+  .grid {
     display: grid;
-    gap: 10px;
-    margin-top: 12px;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin-top: 16px;
   }
 
-  .wide {
-    justify-content: center;
-    width: 100%;
+  .card {
+    padding: 16px;
+    border: 1px solid #333;
+    border-radius: 14px;
+    background: #101018;
+    margin-top: 16px;
   }
 
-  .hint {
-    margin: 12px 0 0;
-    font-size: 0.92rem;
-    line-height: 1.5;
-  }
-
-  /* Feature grid */
-  .arcade-grid {
-    margin-top: 18px;
-  }
-
-  .feature-card {
-    padding: 18px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
-  }
-
-  .feature-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-  }
-
-  .feature-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .feature-card h2 {
-    margin: 0;
-    font-size: 1.05rem;
-  }
-
-  .feature-card p {
+  .card h2 + p {
     margin: 0;
     line-height: 1.6;
   }
 
-  /* Two-column section */
-  .grid.two {
-    margin-top: 18px;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  @media (max-width: 980px) {
-    .grid.two { grid-template-columns: 1fr; }
-  }
-
-  .info-card {
-    padding: 22px;
-  }
-
-  .info-card h2 {
-    margin-top: 0;
-  }
-
-  .list {
-    margin: 0;
-    padding-left: 18px;
-    display: grid;
-    gap: 8px;
-    line-height: 1.6;
-  }
-
-  /* Steps + legal */
-  .steps {
+  ol {
     margin: 0;
     padding-left: 20px;
     display: grid;
@@ -352,31 +210,45 @@ const legalRomSteps = [
 
   .footnote {
     margin: 14px 0 0;
-    font-size: 0.95rem;
-  }
-
-  .legal-card {
-    margin-top: 18px;
-    padding: 22px;
-  }
-
-  .legal-card > p {
-    margin: 0 0 14px;
-    line-height: 1.6;
-  }
-
-  .legal-note {
-    margin-top: 16px;
-    border-color: rgba(34, 197, 94, 0.4);
-    background: rgba(34, 197, 94, 0.08);
-    color: rgba(187, 247, 208, 0.95);
+    font-size: 14px;
   }
 
   code {
-    font-size: 0.92em;
-    padding: 0.14em 0.35em;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.10);
-    background: rgba(255,255,255,0.03);
+    background: #111;
+    color: #eee;
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+
+  .callout {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    background: #0f0f16;
+    opacity: 0.9;
+  }
+
+  .details {
+    margin-top: 14px;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 10px 12px;
+    background: #0f0f16;
+  }
+
+  .details summary {
+    cursor: pointer;
+    user-select: none;
+    opacity: 0.95;
+  }
+
+  .details-body {
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  .details-body p {
+    margin: 0 0 10px;
   }
 </style>
