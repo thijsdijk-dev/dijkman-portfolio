@@ -2,7 +2,8 @@ name: Deploy to Pi
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   deploy:
