@@ -2,52 +2,195 @@
 import Base from "../layouts/Base.astro";
 
 const retroarchUrl = "https://web.libretro.com/";
+
+const highlights = [
+  {
+    title: "Alles-in-één emulator hub",
+    text: "Laad verschillende consoles via cores in één uniforme interface, zonder gedoe met losse tools.",
+  },
+  {
+    title: "Controller ready",
+    text: "Gamepads worden direct ondersteund, inclusief remapping en latency-optimalisaties voor smooth gameplay.",
+  },
+  {
+    title: "Savestates & shaders",
+    text: "Pauzeer en hervat exact waar je was, en geef klassiekers extra sfeer met CRT- en scanline-filters.",
+  },
+];
+
+const quickSteps = [
+  "Open RetroArch via de knop hieronder.",
+  "Kies een core die past bij je game.",
+  "Load Content en start direct je sessie.",
+];
+
+const legalRomSteps = [
+  "Gebruik alleen een legale ROM: bijvoorbeeld een homebrew game, public-domain titel of een eigen back-up waar je rechten op hebt.",
+  "Zet de ROM op je apparaat (pc/laptop/telefoon) en zorg dat het bestand compleet is, zoals .nes, .gb, .sfc of .zip.",
+  "Open in RetroArch: Main Menu → Load Core en kies de juiste emulator-core voor dat bestandsformaat.",
+  "Ga daarna naar Main Menu → Load Content, selecteer je legale ROM-bestand en start de game.",
+  "Optioneel: sla je voortgang op via Quick Menu → Save State en stel controls in via Settings → Input.",
+];
 ---
 
 <Base
   title="Arcade (RetroArch)"
-  description="Start RetroArch direct vanuit de nieuwe arcade-pagina."
+  description="Start RetroArch direct vanuit de vernieuwde arcade-pagina."
 >
   <section class="hero arcade-hero">
-    <p class="badge">Arcade</p>
-    <h1>RetroArch is de nieuwe Arcade</h1>
-    <p>
-      De arcade-pagina is nu gericht op RetroArch. Via onderstaande knop open je direct
-      de webversie in een nieuw tabblad.
+    <div class="glow" aria-hidden="true"></div>
+    <p class="badge arcade-badge">🕹️ Arcade vernieuwd</p>
+    <h1>Retro vibes, moderne launchpad</h1>
+    <p class="lead muted">
+      Je bent op de nieuwe landing voor <strong>RetroArch</strong>: strak, snel en helemaal gericht op
+      direct spelen. Klik, laad je core en ga los.
     </p>
-    <a class="btn" href={retroarchUrl} target="_blank" rel="noreferrer">Open RetroArch</a>
+
+    <div class="btns">
+      <a class="btn primary" href={retroarchUrl} target="_blank" rel="noreferrer">Start RetroArch ↗</a>
+      <a class="btn" href="/">Terug naar home</a>
+    </div>
+  </section>
+
+  <section class="grid arcade-grid">
+    {highlights.map((item) => (
+      <article class="card feature-card">
+        <h2>{item.title}</h2>
+        <p class="muted">{item.text}</p>
+      </article>
+    ))}
   </section>
 
   <section class="card info-card">
-    <h2>Waarom RetroArch?</h2>
+    <h2>Snelle start in 3 stappen</h2>
+    <ol>
+      {quickSteps.map((step) => (
+        <li>{step}</li>
+      ))}
+    </ol>
+    <p class="muted footnote">
+      Tip: werkt het geluid niet direct? Controleer of je browser tab audio toestaat en focus op het RetroArch-venster.
+    </p>
+  </section>
+
+  <section class="card legal-card">
+    <h2>Zo laad je een legale ROM in</h2>
     <p class="muted">
-      Eén centrale plek voor emulatie met meerdere cores en controller-ondersteuning.
-      Daarmee is dit vanaf nu de standaard arcade-route van de site.
+      Gebruik uitsluitend een <strong>legale ROM</strong> waar jij rechten op hebt. Denk aan homebrew,
+      public-domain games of een persoonlijke back-up van een game die je zelf bezit.
+    </p>
+    <ol>
+      {legalRomSteps.map((step) => (
+        <li>{step}</li>
+      ))}
+    </ol>
+    <p class="callout legal-note">
+      Deze pagina moedigt geen illegale downloads aan. Door alleen legale ROM-bestanden te gebruiken,
+      voorkom je copyrightovertreding.
     </p>
   </section>
 </Base>
 
 <style>
   .arcade-hero {
+    position: relative;
+    overflow: hidden;
     margin-top: 18px;
-    max-width: 72ch;
     display: grid;
     gap: 14px;
+    isolation: isolate;
+    background:
+      radial-gradient(circle at 85% -20%, rgba(96, 165, 250, 0.35), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgba(244, 114, 182, 0.2), transparent 35%),
+      #101018;
   }
 
-  .arcade-hero h1 {
-    margin: 0;
+  .glow {
+    position: absolute;
+    inset: auto -120px -120px auto;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.3), transparent 60%);
+    z-index: -1;
   }
 
-  .arcade-hero .btn {
+  .arcade-badge {
     width: fit-content;
+    background: rgba(255, 255, 255, 0.03);
   }
 
-  .info-card {
+  h1 {
+    margin: 0;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    letter-spacing: -0.02em;
+  }
+
+  .lead {
+    max-width: 62ch;
+    line-height: 1.65;
+  }
+
+  .primary {
+    background: linear-gradient(120deg, rgba(59, 130, 246, 0.26), rgba(168, 85, 247, 0.28));
+    border-color: rgba(147, 197, 253, 0.55);
+  }
+
+  .primary:hover {
+    border-color: rgba(196, 181, 253, 0.8);
+  }
+
+  .arcade-grid {
     margin-top: 18px;
   }
 
-  .info-card h2 {
+  .feature-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+  }
+
+  .feature-card h2 {
+    margin: 4px 0 8px;
+    font-size: 1.06rem;
+  }
+
+  .feature-card p {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .info-card,
+  .legal-card {
+    margin-top: 18px;
+    padding: 22px;
+  }
+
+  .info-card h2,
+  .legal-card h2 {
     margin-top: 0;
+  }
+
+  ol {
+    margin: 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 8px;
+    line-height: 1.55;
+  }
+
+  .footnote {
+    margin: 14px 0 0;
+    font-size: 0.95rem;
+  }
+
+  .legal-card > p {
+    margin: 0 0 14px;
+    line-height: 1.6;
+  }
+
+  .legal-note {
+    margin-top: 16px;
+    border-color: rgba(34, 197, 94, 0.4);
+    background: rgba(34, 197, 94, 0.08);
+    color: rgba(187, 247, 208, 0.95);
   }
 </style>
