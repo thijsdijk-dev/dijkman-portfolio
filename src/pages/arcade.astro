@@ -1,6 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
 
+const linkedin = "https://www.linkedin.com/in/thijsdijkman/";
+
 // self-hosted endpoints
 const retroarchUrl = "/retroarch/";
 const uploadUrl = "/retroarch/upload/";
@@ -24,6 +26,15 @@ const quickSteps = [
   "Open RetroArch via de knop hieronder.",
   "Kies een core die past bij je game.",
   "Load Content → selecteer je ROM → spelen.",
+];
+
+const menuLinks = [
+  { href: "/cv", label: "📄 CV + QR" },
+  { href: "/homelab", label: "🛠️ Homelab" },
+  { href: "/services", label: "📦 Services" },
+  { href: "/monitoring", label: "📊 Monitoring" },
+  { href: "/arcade", label: "🕹️ Arcade: RetroArch" },
+  { href: linkedin, label: "in LinkedIn", external: true },
 ];
 
 const legalRomSteps = [
@@ -92,6 +103,24 @@ const legalRomSteps = [
         </p>
       </div>
     </details>
+  </section>
+
+
+
+  <section class="card">
+    <h2>Menu</h2>
+    <div class="btns">
+      {menuLinks.map((item) => (
+        <a
+          class="btn"
+          href={item.href}
+          target={item.external ? "_blank" : undefined}
+          rel={item.external ? "noreferrer" : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
   </section>
 
   <section class="card">

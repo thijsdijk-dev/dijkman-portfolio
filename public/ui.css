@@ -8,7 +8,7 @@
 .nav a:hover{color:#fff}
 
 /* Your existing vibe (dark) – keep it consistent */
-html,body{background:#0b0b0f;color:#f2f2f7}
+html,body{background:#0b0b0f;color:#f2f2f7;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
 .card{background:#101018;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px}
 .hero{background:#101018;border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:28px}
 .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:16px}
