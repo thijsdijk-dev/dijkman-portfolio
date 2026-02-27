@@ -1,6 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
 
+const linkedin = "https://www.linkedin.com/in/thijsdijkman/";
+
 // self-hosted endpoints
 const retroarchUrl = "/retroarch/";
 const uploadUrl = "/retroarch/upload/";
@@ -24,6 +26,15 @@ const quickSteps = [
   "Open RetroArch via de knop hieronder.",
   "Kies een core die past bij je game.",
   "Load Content → selecteer je ROM → spelen.",
+];
+
+const menuLinks = [
+  { href: "/cv", label: "📄 CV + QR" },
+  { href: "/homelab", label: "🛠️ Homelab" },
+  { href: "/services", label: "📦 Services" },
+  { href: "/monitoring", label: "📊 Monitoring" },
+  { href: "/arcade", label: "🕹️ Arcade: RetroArch" },
+  { href: linkedin, label: "in LinkedIn", external: true },
 ];
 
 const legalRomSteps = [
@@ -94,6 +105,24 @@ const legalRomSteps = [
     </details>
   </section>
 
+
+
+  <section class="card">
+    <h2>Menu</h2>
+    <div class="btns">
+      {menuLinks.map((item) => (
+        <a
+          class="btn"
+          href={item.href}
+          target={item.external ? "_blank" : undefined}
+          rel={item.external ? "noreferrer" : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+  </section>
+
   <section class="card">
     <h2>Zo laad je een legale ROM in</h2>
     <p class="muted">
@@ -119,6 +148,7 @@ const legalRomSteps = [
     border: 1px solid #222;
     border-radius: 18px;
     background: #101018;
+    color: #f5f7ff;
     margin-top: 18px;
   }
 
@@ -157,7 +187,7 @@ const legalRomSteps = [
   }
 
   .muted {
-    opacity: 0.8;
+    color: #c6ccda;
   }
 
   .btns {
@@ -172,7 +202,7 @@ const legalRomSteps = [
     border: 1px solid #333;
     border-radius: 10px;
     text-decoration: none;
-    color: inherit;
+    color: #f5f7ff;
     background: transparent;
   }
 
@@ -192,6 +222,7 @@ const legalRomSteps = [
     border: 1px solid #333;
     border-radius: 14px;
     background: #101018;
+    color: #f5f7ff;
     margin-top: 16px;
   }
 
@@ -226,7 +257,7 @@ const legalRomSteps = [
     border: 1px solid #2a2a2a;
     border-radius: 12px;
     background: #0f0f16;
-    opacity: 0.9;
+    color: #dce2f1;
   }
 
   .details {
@@ -235,12 +266,13 @@ const legalRomSteps = [
     border-radius: 12px;
     padding: 10px 12px;
     background: #0f0f16;
+    color: #f5f7ff;
   }
 
   .details summary {
     cursor: pointer;
     user-select: none;
-    opacity: 0.95;
+    color: #eef2ff;
   }
 
   .details-body {
