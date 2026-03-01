@@ -84,7 +84,7 @@ LOG_FILE=/home/pi/backup.log USB_MOUNT=/mnt/usb16 npm run backup:install-cron
 
 Als `dist` of `docker-compose.yml` (nog) niet bestaan, slaat het backupscript die onderdelen over en gaat het gewoon verder.
 
-## RetroArch: alleen Super Instinct toestaan
+## Snes9x: alleen Super Instinct toestaan
 
 Voor de serverconfiguratie is de bedoeling dat alleen deze ROM aanwezig is:
 

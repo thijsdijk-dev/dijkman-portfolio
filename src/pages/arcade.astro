@@ -4,16 +4,16 @@ import Base from "../layouts/Base.astro";
 const linkedin = "https://www.linkedin.com/in/thijsdijkman/";
 
 // self-hosted endpoints
-const retroarchUrl = "/retroarch/snes/";
+const snes9xUrl = "/retroarch/snes/";
 
 const highlights = [
   {
     title: "Eén game, vaste setup",
-    text: "Deze server draait alleen Super Instinct via de SNES-core. Geen losse gamebibliotheek of extra titels.",
+    text: "Deze server draait alleen Super Instinct via Snes9x. Geen losse gamebibliotheek of extra titels.",
   },
   {
-    title: "Start in 1 klik",
-    text: "De launcher stuurt RetroArch automatisch met de juiste core en ROM naar de game.",
+    title: "Autoplay eerst proberen",
+    text: "De launcher probeert automatisch Super Instinct te starten met Snes9x en toont direct de fallback-stappen als dit niet lukt.",
   },
   {
     title: "Copyright veilig",
@@ -23,7 +23,7 @@ const highlights = [
 
 const quickSteps = [
   "Klik op ‘Start Super Instinct’.",
-  "Wacht tot de launcher je automatisch doorstuurt naar RetroArch.",
+  "Wacht tot de launcher je automatisch doorstuurt naar Snes9x.",
   "Start de game niet vanzelf? Volg dan de handmatige stappen hieronder.",
 ];
 
@@ -32,26 +32,26 @@ const menuLinks = [
   { href: "/homelab", label: "🛠️ Homelab" },
   { href: "/services", label: "📦 Services" },
   { href: "/monitoring", label: "📊 Monitoring" },
-  { href: "/arcade", label: "🕹️ Arcade: RetroArch" },
+  { href: "/arcade", label: "🕹️ Arcade: Snes9x" },
   { href: linkedin, label: "in LinkedIn", external: true },
 ];
 
 const launchSteps = [
-  "Ga naar Main Menu → Load Core → kies ‘Snes9x’.",
-  "Ga naar Main Menu → Load Content.",
+  "Open de emulator op /snes9x/ als die niet vanzelf opent.",
+  "Kies ‘Load ROM’ of ‘Open File’.",
   "Open het bestand /retroarch/roms/superinstinct.sfc.",
-  "Druk op Run om Super Instinct te starten.",
+  "Start of resume de emulatie om Super Instinct te spelen.",
 ];
 ---
 
 <Base
-  title="Arcade (RetroArch)"
+  title="Arcade (Snes9x)"
   description="Start Super Instinct direct vanuit de arcade-pagina."
 >
   <section class="hero">
     <div class="tag-row">
       <span class="tag">🕹️ Arcade</span>
-      <span class="tag">RetroArch</span>
+      <span class="tag">Snes9x</span>
     </div>
 
     <h1>Arcade</h1>
@@ -61,12 +61,12 @@ const launchSteps = [
     </p>
 
     <div class="btns">
-      <a class="btn" href={retroarchUrl}>Start Super Instinct</a>
+      <a class="btn" href={snes9xUrl}>Start Super Instinct</a>
       <a class="btn" href="/">Terug naar home</a>
     </div>
 
     <p class="muted footnote">
-      Tip: als audio niet meteen werkt: klik één keer in het RetroArch-venster en check tab-audio permissies.
+      Tip: als audio niet meteen werkt, klik één keer in het emulator-venster en check tab-audio permissies.
     </p>
   </section>
 
@@ -93,8 +93,6 @@ const launchSteps = [
     </p>
   </section>
 
-
-
   <section class="card">
     <h2>Menu</h2>
     <div class="btns">
@@ -114,7 +112,7 @@ const launchSteps = [
   <section class="card">
     <h2>Handmatig opstarten (als autostart faalt)</h2>
     <p class="muted">
-      Volg deze stappen op de RetroArch-interface om alsnog de vaste game te starten.
+      Volg deze stappen op de Snes9x-interface om alsnog de vaste game te starten.
     </p>
     <ol>
       {launchSteps.map((step) => (
@@ -246,5 +244,4 @@ const launchSteps = [
     background: #0f0f16;
     color: #dce2f1;
   }
-
 </style>
