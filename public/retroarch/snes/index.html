@@ -18,14 +18,17 @@
 (async () => {
   const CORE_NAME = "Snes9x";
   const ROM_URL   = "/retroarch/roms/superinstinct.sfc";
+  const RETROARCH_URL = "/retroarch/";
 
   const msg = (t) => document.getElementById("msg").textContent = t;
 
   try {
     const r = await fetch(ROM_URL, { method: "HEAD" });
-    if (!r.ok) { msg(`ROM niet gevonden (${r.status}): ${ROM_URL}`); return; }
+    if (!r.ok) {
+      msg(`ROM-check gaf status ${r.status}. We proberen RetroArch alsnog te starten…`);
+    }
   } catch (e) {
-    msg(`Kan ROM niet checken: ${ROM_URL}`); return;
+    msg("ROM-check lukt niet in deze browser. We starten RetroArch alsnog…");
   }
 
   const payload = { core: CORE_NAME, rom: ROM_URL, system: "snes" };
@@ -39,7 +42,9 @@
   try { localStorage.setItem("content", ROM_URL); } catch {}
 
   msg("Doorsturen naar RetroArch…");
-  location.href = "/retroarch/";
+  setTimeout(() => {
+    location.href = RETROARCH_URL;
+  }, 200);
 })();
 </script>
 
