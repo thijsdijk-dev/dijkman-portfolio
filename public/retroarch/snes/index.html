@@ -17,7 +17,7 @@
 <script>
 (async () => {
   const ROM_URL = "/retroarch/roms/superinstinct.sfc";
-  const EMULATOR_URL = "/snes9x/";
+  const EMULATOR_CANDIDATES = ["/snes9x/", "/retroarch/"];
   const msg = (t) => document.getElementById("msg").textContent = t;
 
   try {
@@ -27,7 +27,16 @@
     msg("ROM-check lukt niet in deze browser. We proberen Snes9x alsnog te openen…");
   }
 
-  const direct = `${EMULATOR_URL}?autostart=1&rom=${encodeURIComponent(ROM_URL)}#autostart=1&rom=${encodeURIComponent(ROM_URL)}`;
+  let emulatorUrl = "/retroarch/";
+  for (const candidate of EMULATOR_CANDIDATES) {
+    try {
+      const r = await fetch(candidate, { method: "HEAD" });
+      if (r.ok) { emulatorUrl = candidate; break; }
+      if (r.status !== 403) emulatorUrl = candidate;
+    } catch {}
+  }
+
+  const direct = `${emulatorUrl}?autostart=1&rom=${encodeURIComponent(ROM_URL)}#autostart=1&rom=${encodeURIComponent(ROM_URL)}`;
 
   const kv = {
     "snes9x.rom": ROM_URL,
@@ -50,7 +59,7 @@
 
   <h2>Werkt autoplay niet?</h2>
   <ol>
-    <li>Open <code>/snes9x/</code>.</li>
+    <li>Open <code>/retroarch/</code> (of <code>/snes9x/</code> als die route op jouw server bestaat).</li>
     <li>Kies <strong>Load ROM</strong> of <strong>Open File</strong>.</li>
     <li>Open <code>/retroarch/roms/superinstinct.sfc</code>.</li>
     <li>Start of resume de emulatie.</li>
