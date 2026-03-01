@@ -83,3 +83,22 @@ LOG_FILE=/home/pi/backup.log USB_MOUNT=/mnt/usb16 npm run backup:install-cron
 ## Opmerking
 
 Als `dist` of `docker-compose.yml` (nog) niet bestaan, slaat het backupscript die onderdelen over en gaat het gewoon verder.
+
+## RetroArch: alleen Super Instinct toestaan
+
+Voor de serverconfiguratie is de bedoeling dat alleen deze ROM aanwezig is:
+
+```text
+/retroarch/roms/superinstinct.sfc
+```
+
+Voorbeeld (op de server):
+
+```bash
+mkdir -p /retroarch/roms
+cp /pad/naar/superinstinct.sfc /retroarch/roms/superinstinct.sfc
+find /retroarch/roms -type f ! -name 'superinstinct.sfc' -delete
+```
+
+Daarmee verwijder je alle andere ROMs en kan alleen Super Instinct gestart worden via de launcher op `/retroarch/snes/`.
+

@@ -4,28 +4,27 @@ import Base from "../layouts/Base.astro";
 const linkedin = "https://www.linkedin.com/in/thijsdijkman/";
 
 // self-hosted endpoints
-const retroarchUrl = "/retroarch/";
-const uploadUrl = "/retroarch/upload/";
+const retroarchUrl = "/retroarch/snes/";
 
 const highlights = [
   {
-    title: "Alles-in-één emulator hub",
-    text: "Laad verschillende consoles via cores in één uniforme interface, zonder losse tools.",
+    title: "Eén game, vaste setup",
+    text: "Deze server draait alleen Super Instinct via de SNES-core. Geen losse gamebibliotheek of extra titels.",
   },
   {
-    title: "Controller ready",
-    text: "Gamepads worden direct ondersteund, inclusief remapping en latency-optimalisaties.",
+    title: "Start in 1 klik",
+    text: "De launcher stuurt RetroArch automatisch met de juiste core en ROM naar de game.",
   },
   {
-    title: "Savestates & shaders",
-    text: "Pauzeer en hervat exact waar je was, en geef klassiekers extra sfeer met filters.",
+    title: "Copyright veilig",
+    text: "Alle andere games zijn verwijderd zodat alleen Super Instinct vanaf de server gestart kan worden.",
   },
 ];
 
 const quickSteps = [
-  "Open RetroArch via de knop hieronder.",
-  "Kies een core die past bij je game.",
-  "Load Content → selecteer je ROM → spelen.",
+  "Klik op ‘Start Super Instinct’.",
+  "Wacht tot de launcher je automatisch doorstuurt naar RetroArch.",
+  "Start de game niet vanzelf? Volg dan de handmatige stappen hieronder.",
 ];
 
 const menuLinks = [
@@ -37,18 +36,17 @@ const menuLinks = [
   { href: linkedin, label: "in LinkedIn", external: true },
 ];
 
-const legalRomSteps = [
-  "Gebruik alleen een legale ROM (homebrew, public-domain of je eigen back-up waar je rechten op hebt).",
-  "Zet je ROM op je apparaat (pc/laptop/telefoon). Bestanden zoals .nes, .gb, .sfc of .zip.",
-  "In RetroArch: Main Menu → Load Core en kies de juiste emulator-core.",
-  "Daarna: Main Menu → Load Content → selecteer je ROM → start.",
-  "Optioneel: Quick Menu → Save State, en Settings → Input voor controls.",
+const launchSteps = [
+  "Ga naar Main Menu → Load Core → kies ‘Snes9x’.",
+  "Ga naar Main Menu → Load Content.",
+  "Open het bestand /retroarch/roms/superinstinct.sfc.",
+  "Druk op Run om Super Instinct te starten.",
 ];
 ---
 
 <Base
   title="Arcade (RetroArch)"
-  description="Start RetroArch direct vanuit de arcade-pagina."
+  description="Start Super Instinct direct vanuit de arcade-pagina."
 >
   <section class="hero">
     <div class="tag-row">
@@ -58,13 +56,12 @@ const legalRomSteps = [
 
     <h1>Arcade</h1>
     <p class="muted lead">
-      Start RetroArch direct in je browser. Kies een core, laad content en je bent weg.
-      Uploaden kan via de ROM-uploader (alleen met token).
+      Op deze server draait alleen <strong>Super Instinct</strong>. Andere games zijn verwijderd om
+      copyright-risico te voorkomen.
     </p>
 
     <div class="btns">
-      <a class="btn" href={retroarchUrl}>Start RetroArch</a>
-      <a class="btn" href={uploadUrl}>Upload ROMs</a>
+      <a class="btn" href={retroarchUrl}>Start Super Instinct</a>
       <a class="btn" href="/">Terug naar home</a>
     </div>
 
@@ -90,19 +87,10 @@ const legalRomSteps = [
       ))}
     </ol>
 
-    <details class="details">
-      <summary>ROM upload: hoe werkt dat met token?</summary>
-      <div class="details-body muted">
-        <p>
-          De uploadpagina stuurt bestanden naar <code>/retroarch/upload/api/upload</code>.
-          Je uploader verwacht een header <code>X-Upload-Token</code>.
-        </p>
-        <p>
-          Voor jezelf: je token staat als <code>UPLOAD_TOKEN</code> in de <code>rom-uploader</code> container.
-          Publiceer die token liever niet op je site; behandel ‘m als geheim.
-        </p>
-      </div>
-    </details>
+    <p class="callout">
+      Er is bewust geen publieke uploadfunctie meer actief. De server is beperkt tot één game:
+      <strong>Super Instinct</strong>.
+    </p>
   </section>
 
 
@@ -124,19 +112,18 @@ const legalRomSteps = [
   </section>
 
   <section class="card">
-    <h2>Zo laad je een legale ROM in</h2>
+    <h2>Handmatig opstarten (als autostart faalt)</h2>
     <p class="muted">
-      Gebruik uitsluitend een <strong>legale ROM</strong> waar jij rechten op hebt (homebrew,
-      public-domain of een eigen back-up).
+      Volg deze stappen op de RetroArch-interface om alsnog de vaste game te starten.
     </p>
     <ol>
-      {legalRomSteps.map((step) => (
+      {launchSteps.map((step) => (
         <li>{step}</li>
       ))}
     </ol>
 
     <p class="callout">
-      Deze pagina moedigt geen illegale downloads aan. Gebruik alleen ROM-bestanden die je legaal mag gebruiken.
+      Alleen <code>/retroarch/roms/superinstinct.sfc</code> hoort op deze server te staan.
     </p>
   </section>
 </Base>
@@ -260,27 +247,4 @@ const legalRomSteps = [
     color: #dce2f1;
   }
 
-  .details {
-    margin-top: 14px;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    padding: 10px 12px;
-    background: #0f0f16;
-    color: #f5f7ff;
-  }
-
-  .details summary {
-    cursor: pointer;
-    user-select: none;
-    color: #eef2ff;
-  }
-
-  .details-body {
-    margin-top: 10px;
-    line-height: 1.6;
-  }
-
-  .details-body p {
-    margin: 0 0 10px;
-  }
 </style>
