@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Super Instinct — Snes9x</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:40px;line-height:1.4;background:#0f1117;color:#f5f7ff}
+    code{background:#1d2230;padding:2px 6px;border-radius:6px}
+    .muted{opacity:.8}
+  </style>
+</head>
+<body>
+  <h1>Super Instinct start…</h1>
+  <p class="muted" id="msg">Launcher controleert ROM en probeert autoplay met Snes9x.</p>
+
+<script>
+(async () => {
+  const ROM_URL = "/retroarch/roms/superinstinct.sfc";
+  const EMULATOR_URL = "/snes9x/";
+  const msg = (t) => document.getElementById("msg").textContent = t;
+
+  try {
+    const r = await fetch(ROM_URL, { method: "HEAD" });
+    if (!r.ok) msg(`ROM-check gaf status ${r.status}. We proberen Snes9x alsnog te openen…`);
+  } catch {
+    msg("ROM-check lukt niet in deze browser. We proberen Snes9x alsnog te openen…");
+  }
+
+  const direct = `${EMULATOR_URL}?autostart=1&rom=${encodeURIComponent(ROM_URL)}#autostart=1&rom=${encodeURIComponent(ROM_URL)}`;
+
+  // Mogelijke sleutelvarianten voor verschillende Snes9x web-builds.
+  const kv = {
+    "snes9x.rom": ROM_URL,
+    "snes9x.autostart": "1",
+    "rom": ROM_URL,
+    "content": ROM_URL,
+    "selectedContent": ROM_URL,
+    "autoload": "1",
+    "autostart": "1"
+  };
+
+  Object.entries(kv).forEach(([k, v]) => {
+    try { localStorage.setItem(k, v); } catch {}
+  });
+
+  msg("Doorsturen naar Snes9x…");
+  setTimeout(() => { location.href = direct; }, 250);
+})();
+</script>
+
+  <h2>Werkt autoplay niet?</h2>
+  <ol>
+    <li>Open <code>/snes9x/</code>.</li>
+    <li>Kies <strong>Load ROM</strong> of <strong>Open File</strong>.</li>
+    <li>Open <code>/retroarch/roms/superinstinct.sfc</code>.</li>
+    <li>Start of resume de emulatie.</li>
+  </ol>
+</body>
+</html>
