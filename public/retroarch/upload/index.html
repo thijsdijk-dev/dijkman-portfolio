@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RetroArch ROM Uploader</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f1115;
+        --card: #151924;
+        --border: #2a3040;
+        --text: #f5f7ff;
+        --muted: #b4bed3;
+        --accent: #6ea8ff;
+        --success: #39d98a;
+        --danger: #ff6b7a;
+      }
+      body { font-family: Inter, system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+      main { max-width: 940px; margin: 0 auto; padding: 28px 18px 50px; }
+      h1 { margin: 0 0 10px; }
+      .muted { color: var(--muted); }
+      section { margin-top: 24px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); }
+      .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+      input[type="text"] { min-width: 280px; width: 420px; max-width: 100%; padding: 9px 11px; border-radius: 10px; border: 1px solid var(--border); background: #0d1017; color: var(--text); }
+      button { padding: 9px 12px; border-radius: 10px; border: 1px solid #3a4356; background: #161d2b; color: var(--text); cursor: pointer; }
+      button:hover { border-color: #5b6b8d; }
+      code { background: #0d1017; border: 1px solid var(--border); padding: 1px 6px; border-radius: 8px; }
+      .ok { color: var(--success); }
+      .err { color: var(--danger); white-space: pre-wrap; }
+      table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+      th, td { border-bottom: 1px solid var(--border); text-align: left; padding: 10px 6px; }
+      .small { font-size: .9rem; }
+      a { color: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>RetroArch ROM Uploader</h1>
+      <p class="muted">
+        Upload naar <code>/retroarch/roms/</code>. Je kunt een API base handmatig opslaan of automatisch laten vinden.
+      </p>
+
+      <section>
+        <h2>0) API endpoint</h2>
+        <div class="row">
+          <input id="apiBase" type="text" placeholder="Bijv. /retroarch/upload/api" />
+          <button id="saveApi">Opslaan</button>
+          <button id="autoApi">Auto detect</button>
+          <span id="apiMsg" class="muted"></span>
+        </div>
+      </section>
+
+      <section>
+        <h2>1) Upload token</h2>
+        <div class="row">
+          <input id="token" type="text" placeholder="Plak hier je upload token" />
+          <button id="saveToken">Opslaan</button>
+          <button id="clearToken">Wissen</button>
+          <span id="tokenMsg" class="muted"></span>
+        </div>
+      </section>
+
+      <section>
+        <h2>2) Upload ROM</h2>
+        <div class="row">
+          <input id="file" type="file" />
+          <button id="upload">Upload</button>
+          <span class="muted small">Max bestandsgrootte hangt af van je serverinstellingen.</span>
+        </div>
+        <p id="uploadMsg" class="muted"></p>
+      </section>
+
+      <section>
+        <h2>3) ROMs op server</h2>
+        <button id="refresh">Verversen</button>
+        <p id="listMsg" class="muted"></p>
+        <table>
+          <thead>
+            <tr><th>Bestand</th><th>Grootte</th><th>Download</th></tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      const TOKEN_KEY = 'retroarch_upload_token';
+      const API_KEY = 'retroarch_upload_api_base';
+
+      const tokenEl = document.getElementById('token');
+      const apiBaseEl = document.getElementById('apiBase');
+      const apiMsg = document.getElementById('apiMsg');
+      const tokenMsg = document.getElementById('tokenMsg');
+      const uploadMsg = document.getElementById('uploadMsg');
+      const listMsg = document.getElementById('listMsg');
+      const rowsEl = document.getElementById('rows');
+
+      const API_BASES = [
+        '/retroarch/upload/api',
+        '/retroarch/upload/api/',
+        '/retroarch/api',
+        '/retroarch/api/',
+        '/api',
+        '/api/',
+      ];
+
+      const LIST_PATHS = ['/files', '/files/', '/list', '/list/', '/'];
+      const UPLOAD_PATHS = ['/upload', '/upload/', '/'];
+
+      let detectedBase = null;
+
+      const setMsg = (el, text, cls = 'muted') => {
+        el.className = cls;
+        el.textContent = text;
+      };
+
+      const token = () => tokenEl.value.trim();
+      const cleanBase = (value) => (value || '').trim().replace(/\/+$/, '');
+
+      const looksHtml = (res, text) => {
+        const type = (res.headers.get('content-type') || '').toLowerCase();
+        return type.includes('text/html') || /^\s*<!doctype html/i.test(text) || /^\s*<html/i.test(text);
+      };
+
+      async function requestPaths(base, paths, init = {}, allowAuthErrors = false) {
+        let lastErr = null;
+        for (const path of paths) {
+          const url = `${base}${path}`;
+          try {
+            const res = await fetch(url, init);
+            const text = await res.text();
+
+            if (looksHtml(res, text)) {
+              lastErr = new Error(`Endpoint ${url} gaf HTML terug (${res.status}).`);
+              continue;
+            }
+            if (res.status === 404 || res.status === 405 || res.status === 501) {
+              lastErr = new Error(`Endpoint ${url} wijst deze methode af (${res.status}).`);
+              continue;
+            }
+            if (!allowAuthErrors && (res.status === 401 || res.status === 403)) {
+              lastErr = new Error(`Geen toegang op ${url} (${res.status}).`);
+              continue;
+            }
+            return { url, res, text };
+          } catch (err) {
+            lastErr = err;
+          }
+        }
+        throw lastErr || new Error(`Geen werkend endpoint gevonden voor base ${base}.`);
+      }
+
+      function parseJsonOrThrow(text, fallback = {}) {
+        if (!text || !text.trim()) return fallback;
+        try {
+          return JSON.parse(text);
+        } catch {
+          throw new Error(`Response is geen geldige JSON:\n${text.slice(0, 500)}`);
+        }
+      }
+
+      async function detectApiBase() {
+        const preferred = cleanBase(apiBaseEl.value);
+        const candidates = preferred
+          ? [preferred, ...API_BASES.filter((b) => cleanBase(b) !== preferred)]
+          : API_BASES;
+
+        let lastErr = null;
+        for (const candidate of candidates) {
+          const base = cleanBase(candidate);
+          if (!base) continue;
+          try {
+            const { text } = await requestPaths(base, LIST_PATHS, { method: 'GET' });
+            parseJsonOrThrow(text, {});
+            detectedBase = base;
+            apiBaseEl.value = base;
+            localStorage.setItem(API_KEY, base);
+            setMsg(apiMsg, `API gevonden: ${base}`, 'ok');
+            return base;
+          } catch (err) {
+            lastErr = err;
+          }
+        }
+        throw lastErr || new Error('Kon geen API-base detecteren.');
+      }
+
+      async function getBase() {
+        const manual = cleanBase(apiBaseEl.value);
+        if (manual) return manual;
+        const saved = cleanBase(localStorage.getItem(API_KEY) || '');
+        if (saved) {
+          apiBaseEl.value = saved;
+          return saved;
+        }
+        return detectApiBase();
+      }
+
+      document.getElementById('saveApi').onclick = () => {
+        const base = cleanBase(apiBaseEl.value);
+        if (!base) {
+          setMsg(apiMsg, 'Vul eerst een API base in.', 'err');
+          return;
+        }
+        detectedBase = base;
+        localStorage.setItem(API_KEY, base);
+        setMsg(apiMsg, `API base opgeslagen: ${base}`, 'ok');
+      };
+
+      document.getElementById('autoApi').onclick = async () => {
+        setMsg(apiMsg, 'API detecteren…', 'muted');
+        try {
+          await detectApiBase();
+        } catch (err) {
+          setMsg(apiMsg, `Detectie mislukt: ${err.message}`, 'err');
+        }
+      };
+
+      document.getElementById('saveToken').onclick = () => {
+        localStorage.setItem(TOKEN_KEY, token());
+        setMsg(tokenMsg, 'Token staat opgeslagen.', 'ok');
+      };
+
+      document.getElementById('clearToken').onclick = () => {
+        localStorage.removeItem(TOKEN_KEY);
+        tokenEl.value = '';
+        setMsg(tokenMsg, 'Token gewist.', 'muted');
+      };
+
+      async function refreshList() {
+        setMsg(listMsg, 'Lijst laden…', 'muted');
+        rowsEl.innerHTML = '';
+
+        try {
+          const base = await getBase();
+          const { url, text } = await requestPaths(base, LIST_PATHS, { method: 'GET' });
+          const data = parseJsonOrThrow(text, {});
+          const files = data.files || data.items || [];
+
+          if (!files.length) {
+            setMsg(listMsg, `Geen bestanden gevonden (${url}).`, 'muted');
+            return;
+          }
+
+          setMsg(listMsg, `${files.length} bestand(en) gevonden via ${url}.`, 'ok');
+          for (const file of files) {
+            const name = file.name || file.filename || '(onbekend)';
+            const sizeBytes = file.size || file.bytes || 0;
+            const size = sizeBytes ? `${(sizeBytes / (1024 * 1024)).toFixed(2)} MB` : '-';
+
+            const tr = document.createElement('tr');
+            const download = `${base}/download/${encodeURIComponent(name)}`;
+            tr.innerHTML = `<td>${name}</td><td>${size}</td><td><a href="${download}" target="_blank" rel="noreferrer">Download</a></td>`;
+            rowsEl.appendChild(tr);
+          }
+        } catch (err) {
+          setMsg(listMsg, `Kon lijst niet laden: ${err.message}`, 'err');
+        }
+      }
+
+      document.getElementById('upload').onclick = async () => {
+        const fileEl = document.getElementById('file');
+        const file = fileEl.files && fileEl.files[0];
+
+        if (!file) {
+          setMsg(uploadMsg, 'Kies eerst een bestand.', 'err');
+          return;
+        }
+        if (!token()) {
+          setMsg(uploadMsg, 'Voeg eerst een upload token toe.', 'err');
+          return;
+        }
+
+        const form = new FormData();
+        form.append('file', file);
+        setMsg(uploadMsg, `Uploaden van ${file.name}…`, 'muted');
+
+        try {
+          const base = await getBase();
+          const { url, res, text } = await requestPaths(base, UPLOAD_PATHS, {
+            method: 'POST',
+            headers: { 'X-Upload-Token': token() },
+            body: form,
+          }, true);
+
+          if (!res.ok) {
+            throw new Error(`Upload faalde op ${url} (${res.status}):\n${text.slice(0, 500)}`);
+          }
+
+          const data = parseJsonOrThrow(text, {});
+          setMsg(uploadMsg, `Upload gelukt via ${url}: ${data.filename || file.name}`, 'ok');
+          await refreshList();
+        } catch (err) {
+          setMsg(uploadMsg, `Upload mislukt: ${err.message}`, 'err');
+        }
+      };
+
+      document.getElementById('refresh').onclick = refreshList;
+
+      (function init() {
+        const savedToken = localStorage.getItem(TOKEN_KEY) || '';
+        const savedApi = cleanBase(localStorage.getItem(API_KEY) || '/retroarch/upload/api');
+
+        tokenEl.value = savedToken;
+        apiBaseEl.value = savedApi;
+        detectedBase = savedApi;
+
+        if (savedToken) setMsg(tokenMsg, 'Token geladen uit browser-opslag.', 'ok');
+        if (savedApi) setMsg(apiMsg, `API base geladen: ${savedApi}`, 'muted');
+
+        refreshList();
+      })();
+    </script>
+  </body>
+</html>
