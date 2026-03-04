@@ -1,96 +1,285 @@
 ---
-import Base from "../layouts/Base.astro";
-
 const name = "Thijs Dijkman";
 const role = "Software Engineer (in opleiding)";
 const qrPng = "/assets/qr-cv.png";
 const publicCvUrl = "https://www.dijkman.dev/assets/cv.pdf";
 const cvUpdatedAt = "Januari 2026";
+
 ---
 
-<Base
-  title={`CV — ${name}`}
-  description="Curriculum Vitae van Thijs Dijkman. Bekijk, download of scan de QR-code."
->
-  <main class="wrap">
-    <div class="topbar">
-      <a class="back" href="/">← Terug naar home</a>
-      <span class="badge">📄 {role}</span>
-    </div>
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CV — {name}</title>
+    <meta name="description" content="Curriculum Vitae van Thijs Dijkman. Bekijk, download of scan de QR-code." />
 
-    <section class="hero">
-      <h1>CV — {name}</h1>
-      <p class="subtitle">
-        Hier vind je mijn actuele CV als PDF. Je kunt het direct bekijken, downloaden of openen via de QR-code.
-      </p>
-      <p class="meta">Laatst bijgewerkt: {cvUpdatedAt}</p>
-    </section>
+    <style>
+      :root {
+        --bg: #060b16;
+        --bg-soft: rgba(255, 255, 255, 0.04);
+        --card: rgba(255, 255, 255, 0.06);
+        --border: rgba(255, 255, 255, 0.14);
+        --text: rgba(255, 255, 255, 0.94);
+        --muted: rgba(255, 255, 255, 0.72);
+        --accent: #7c8cff;
+        --success: #2fd39a;
+        --radius: 18px;
+        --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      }
 
-    <div class="grid">
-      <section class="card">
-        <h2>Download & bekijk</h2>
-        <p class="muted">
-          Gebruik de knoppen hieronder om het document meteen te openen of op te slaan voor later.
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        background:
+          radial-gradient(1000px 650px at 14% -8%, rgba(124, 140, 255, 0.26), transparent 55%),
+          radial-gradient(900px 500px at 90% 12%, rgba(47, 211, 154, 0.2), transparent 52%),
+          var(--bg);
+        color: var(--text);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .wrap {
+        width: min(1080px, 100%);
+        margin: 0 auto;
+        padding: 32px 20px 42px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      .back,
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--border);
+        background: var(--bg-soft);
+        border-radius: 999px;
+        padding: 10px 14px;
+      }
+
+      .back {
+        text-decoration: none;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .back:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .badge {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 30px;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: linear-gradient(135deg, rgba(124, 140, 255, 0.16), rgba(255, 255, 255, 0.04));
+        box-shadow: var(--shadow);
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        margin: 0;
+        letter-spacing: -0.03em;
+        font-size: clamp(2rem, 4vw, 2.8rem);
+      }
+
+      .subtitle {
+        margin: 12px 0 0;
+        max-width: 70ch;
+        line-height: 1.65;
+        color: var(--muted);
+      }
+
+      .meta {
+        margin-top: 16px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 14px;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      h2 {
+        margin: 0 0 10px;
+        font-size: 1.1rem;
+      }
+
+      .muted {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      ul {
+        margin: 14px 0 0;
+        padding-left: 20px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      li + li {
+        margin-top: 8px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.05);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .btn.primary {
+        background: rgba(124, 140, 255, 0.26);
+        border-color: rgba(124, 140, 255, 0.4);
+      }
+
+      .btn.primary:hover {
+        background: rgba(124, 140, 255, 0.35);
+      }
+
+      .code {
+        margin-top: 14px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.86);
+        overflow-x: auto;
+      }
+
+      .qrwrap {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      .qr {
+        width: min(220px, 100%);
+        aspect-ratio: 1 / 1;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px;
+        background: white;
+      }
+
+      @media (max-width: 680px) {
+        .topbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .hero,
+        .card {
+          padding: 18px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="wrap">
+      <div class="topbar">
+        <a class="back" href="/">← Terug naar home</a>
+        <span class="badge">📄 {role}</span>
+      </div>
+
+      <section class="hero">
+        <h1>CV — {name}</h1>
+        <p class="subtitle">
+          Hier vind je mijn actuele CV als PDF. Je kunt het direct bekijken, downloaden of openen via de QR-code.
         </p>
-
-        <div class="actions">
-          <a class="btn primary" href={publicCvUrl} target="_blank" rel="noreferrer">👀 Bekijk CV</a>
-          <a class="btn" href={publicCvUrl} download>⬇️ Download CV</a>
-        </div>
-
-        <div class="code">{publicCvUrl}</div>
+        <p class="meta">Laatst bijgewerkt: {cvUpdatedAt}</p>
       </section>
 
-      <section class="card">
-        <h2>QR-code</h2>
-        <p class="muted">Scan de QR-code met je telefoon om direct naar de CV-PDF te gaan.</p>
+      <div class="grid">
+        <section class="card">
+          <h2>Download & bekijk</h2>
+          <p class="muted">
+            Gebruik de knoppen hieronder om het document meteen te openen of op te slaan voor later.
+          </p>
 
-        <div class="qrwrap">
-          <img class="qr" src={qrPng} alt="QR-code naar CV PDF" loading="lazy" />
-          <div>
-            <div class="code">{publicCvUrl}</div>
+          <div class="actions">
+            <a class="btn primary" href={publicCvUrl} target="_blank" rel="noreferrer">👀 Bekijk CV</a>
+            <a class="btn" href={publicCvUrl} download>⬇️ Download CV</a>
           </div>
-        </div>
-      </section>
-    </div>
-  </main>
-</Base>
 
-<style>
-  :global(body) {
-    margin: 0;
-    min-height: 100vh;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    background:
-      radial-gradient(1000px 650px at 14% -8%, rgba(124, 140, 255, 0.26), transparent 55%),
-      radial-gradient(900px 500px at 90% 12%, rgba(47, 211, 154, 0.2), transparent 52%),
-      #060b16;
-    color: rgba(255, 255, 255, 0.94);
-  }
+          <div class="code">{publicCvUrl}</div>
+        </section>
 
-  .wrap { width: min(1080px, 100%); margin: 0 auto; padding: 8px 0 42px; }
-  .topbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 20px; }
-  .back, .badge { display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.04); border-radius: 999px; padding: 10px 14px; }
-  .back { text-decoration: none; transition: transform 0.2s ease, background 0.2s ease; }
-  .back:hover { transform: translateY(-1px); background: rgba(255, 255, 255, 0.08); }
-  .hero { padding: 26px; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 24px; background: linear-gradient(135deg, rgba(124, 140, 255, 0.16), rgba(255, 255, 255, 0.04)); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35); margin-bottom: 18px; }
-  h1 { margin: 0; letter-spacing: -0.03em; font-size: clamp(2rem, 4vw, 2.8rem); }
-  .subtitle { margin: 12px 0 0; max-width: 70ch; line-height: 1.65; color: rgba(255, 255, 255, 0.72); }
-  .meta { margin-top: 16px; color: rgba(255, 255, 255, 0.78); font-size: 14px; }
-  .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-  .card { border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.06); border-radius: 18px; padding: 20px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35); }
-  h2 { margin: 0 0 10px; font-size: 1.1rem; }
-  .muted { margin: 0; color: rgba(255, 255, 255, 0.72); line-height: 1.6; }
-  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 14px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(255, 255, 255, 0.05); text-decoration: none; font-weight: 600; }
-  .btn:hover { background: rgba(255, 255, 255, 0.1); }
-  .btn.primary { background: rgba(124, 140, 255, 0.26); border-color: rgba(124, 140, 255, 0.4); }
-  .btn.primary:hover { background: rgba(124, 140, 255, 0.35); }
-  .code { margin-top: 14px; padding: 10px 12px; border-radius: 12px; border: 1px dashed rgba(255, 255, 255, 0.2); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 13px; color: rgba(255, 255, 255, 0.86); overflow-x: auto; }
-  .qrwrap { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
-  .qr { width: min(220px, 100%); aspect-ratio: 1 / 1; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.2); padding: 10px; background: white; }
-  @media (max-width: 680px) {
-    .topbar { flex-direction: column; align-items: flex-start; }
-    .hero, .card { padding: 18px; }
-  }
-</style>
+        <section class="card">
+          <h2>QR-code</h2>
+          <p class="muted">Scan de QR-code met je telefoon om direct naar de CV-PDF te gaan.</p>
+
+          <div class="qrwrap">
+            <img class="qr" src={qrPng} alt="QR-code naar CV PDF" loading="lazy" />
+            <div>
+              <div class="code">{publicCvUrl}</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script is:inline>
+      window.$sitegpt = window.$sitegpt || [];
+      (function () {
+        const d = document;
+        const s = d.createElement("script");
+        s.src = "https://sitegpt.ai/widget/0387ad53-c5cf-4ddc-8446-692aadcac1f5.js";
+        s.async = true;
+        (d.head || d.getElementsByTagName("head")[0]).appendChild(s);
+      })();
+    </script>
+
+  </body>
+</html>

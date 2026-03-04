@@ -1,95 +1,124 @@
 ---
-import Base from "../layouts/Base.astro";
-
 const linkedin = "https://www.linkedin.com/in/thijsdijkman/";
 ---
 
-<Base
-  title="Portfolio"
-  description="Portfolio van Thijs — Software Engineer (Make IT Work) — projecten, homelab en CV."
->
-  <div class="home-wrap">
-    <div class="hero">
-      <div class="tag">MakeIT Work</div>
-      <div class="tag">Software Engineer track</div>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio</title>
+    <meta
+      name="description"
+      content="Portfolio van Thijs — Software Engineer (Make IT Work) — projecten, homelab en CV."
+    />
 
-      <h1>Portfolio project</h1>
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" href="/favicon.ico" />
 
-      <p class="muted">
-        Hoi, ik ben Thijs Dijkman en ik richt me op een start als
-        <strong>Software Engineer</strong> via de MakeIT Work opleiding. Deze website draait op mijn
-        eigen Linux Pi server (headless) en laat zien hoe ik <strong>deploy</strong>,
-        <strong>Docker</strong> gebruik en mijn infrastructuur documenteer.
+    <style>
+      body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+      .wrap{max-width:980px;margin:0 auto;padding:32px}
+      .hero{padding:28px;border:1px solid #222;border-radius:18px}
+      .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:16px}
+      .card{padding:16px;border:1px solid #333;border-radius:14px}
+      a{color:inherit}
+      .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+      .btn{padding:10px 12px;border:1px solid #333;border-radius:10px;text-decoration:none}
+      .btn-icon{display:inline-flex;align-items:center;gap:8px}
+      .btn-icon svg{width:16px;height:16px;display:block}
+      .muted{opacity:.8}
+      .tag{display:inline-block;padding:4px 8px;border:1px solid #444;border-radius:999px;font-size:12px;margin-right:8px}
+      .footer{margin-top:28px;opacity:.75;font-size:14px}
+      code{background:#111;color:#eee;padding:2px 6px;border-radius:6px}
+      body{background:#0b0b0f;color:#f2f2f7}
+      .hero,.card{background:#101018}
+      .btn:hover{border-color:#777}
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="hero">
+        <div class="tag">MakeIT Work</div>
+        <div class="tag">Software Engineer track</div>
+
+        <h1>Portfolio project</h1>
+
+        <p class="muted">
+          Hoi, ik ben Thijs Dijkman en ik richt me op een start als
+          <strong>Software Engineer</strong> via de MakeIT Work opleiding. Deze website draait op mijn
+          eigen Linux Pi server (headless) en laat zien hoe ik <strong>deploy</strong>,
+          <strong>Docker</strong> gebruik en mijn infrastructuur documenteer.
+        </p>
+
+        <div class="callout success" style="color:#39ff14;">
+          🚀 Deployed via GitHub Actions
+        </div>
+
+        <div class="btns">
+          <a class="btn" href="/cv">📄 CV + QR</a>
+
+          <a
+            class="btn btn-icon"
+            href={linkedin}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn profiel van Thijs Dijkman"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                fill="currentColor"
+                d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M8.34 17.34V10.7H6.13V17.34H8.34M7.24 9.79A1.29 1.29 0 1 0 7.24 7.21A1.29 1.29 0 0 0 7.24 9.79M17.87 17.34V13.7C17.87 11.75 16.83 10.56 15.14 10.56C13.78 10.56 13.17 11.3 12.83 11.82V10.7H10.62V17.34H12.83V13.65C12.83 12.68 13.02 11.75 14.22 11.75C15.41 11.75 15.43 12.86 15.43 13.71V17.34H17.87Z"
+              />
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+
+          <a class="btn" href="/homelab">🛠️ Homelab</a>
+          <a class="btn" href="/services">📦 Services</a>
+          <a class="btn" href="/monitoring">📊 Monitoring</a>
+          <a class="btn" href="/arcade">🕹️ Arcade: Snes9x</a>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Deployed</h3>
+          <p class="muted">Eigen domein, DNS, port-forwarding, reverse proxy, Docker networking.</p>
+        </div>
+
+        <div class="card">
+          <h3>Secured</h3>
+          <p class="muted">SSH key-only login, UFW (default deny + 80/443), Fail2ban sshd-jail en hardened sshd-config.</p>
+        </div>
+
+        <div class="card">
+          <h3>Built</h3>
+          <p class="muted">Statische site (Astro) en infra als “living documentation”.</p>
+        </div>
+      </div>
+
+      <p class="footer">
+        Benieuwd naar mijn achtergrond? Scan de QR op <a href="/cv">/cv</a>.<br />
+        Tech: <code>Raspberry Pi</code> + <code>Docker</code> + <code>Nginx Proxy Manager</code> +
+        <code>Let’s Encrypt</code>.
       </p>
-
-      <div class="callout success" style="color:#39ff14;">🚀 Deployed via GitHub Actions</div>
-
-      <div class="btns">
-        <a class="btn" href="/cv">📄 CV + QR</a>
-
-        <a
-          class="btn btn-icon"
-          href={linkedin}
-          target="_blank"
-          rel="noreferrer"
-          aria-label="LinkedIn profiel van Thijs Dijkman"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path
-              fill="currentColor"
-              d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M8.34 17.34V10.7H6.13V17.34H8.34M7.24 9.79A1.29 1.29 0 1 0 7.24 7.21A1.29 1.29 0 0 0 7.24 9.79M17.87 17.34V13.7C17.87 11.75 16.83 10.56 15.14 10.56C13.78 10.56 13.17 11.3 12.83 11.82V10.7H10.62V17.34H12.83V13.65C12.83 12.68 13.02 11.75 14.22 11.75C15.41 11.75 15.43 12.86 15.43 13.71V17.34H17.87Z"
-            />
-          </svg>
-          <span>LinkedIn</span>
-        </a>
-
-        <a class="btn" href="/homelab">🛠️ Homelab</a>
-        <a class="btn" href="/services">📦 Services</a>
-        <a class="btn" href="/monitoring">📊 Monitoring</a>
-        <a class="btn" href="/arcade">🕹️ Arcade: Snes9x</a>
-      </div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <h3>Deployed</h3>
-        <p class="muted">Eigen domein, DNS, port-forwarding, reverse proxy, Docker networking.</p>
-      </div>
-
-      <div class="card">
-        <h3>Secured</h3>
-        <p class="muted">SSH key-only login, UFW (default deny + 80/443), Fail2ban sshd-jail en hardened sshd-config.</p>
-      </div>
-
-      <div class="card">
-        <h3>Built</h3>
-        <p class="muted">Statische site (Astro) en infra als “living documentation”.</p>
-      </div>
-    </div>
-
-    <p class="footer">
-      Benieuwd naar mijn achtergrond? Scan de QR op <a href="/cv">/cv</a>.<br />
-      Tech: <code>Raspberry Pi</code> + <code>Docker</code> + <code>Nginx Proxy Manager</code> +
-      <code>Let’s Encrypt</code>.
-    </p>
-  </div>
-</Base>
-
-<style>
-  :global(body){margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#0b0b0f;color:#f2f2f7}
-  .home-wrap{max-width:980px;margin:0 auto}
-  .hero{padding:28px;border:1px solid #222;border-radius:18px}
-  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:16px}
-  .card{padding:16px;border:1px solid #333;border-radius:14px}
-  a{color:inherit}
-  .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-  .btn{padding:10px 12px;border:1px solid #333;border-radius:10px;text-decoration:none}
-  .btn-icon{display:inline-flex;align-items:center;gap:8px}
-  .btn-icon svg{width:16px;height:16px;display:block}
-  .muted{opacity:.8}
-  .tag{display:inline-block;padding:4px 8px;border:1px solid #444;border-radius:999px;font-size:12px;margin-right:8px}
-  .footer{margin-top:28px;opacity:.75;font-size:14px}
-  code{background:#111;color:#eee;padding:2px 6px;border-radius:6px}
-  .hero,.card{background:#101018}
-  .btn:hover{border-color:#777}
-</style>
+    <!-- SiteGPT -->
+    <script is:inline>
+      window.$sitegpt = window.$sitegpt || [];
+      (function () {
+        const d = document;
+        const s = d.createElement("script");
+        s.src = "https://sitegpt.ai/widget/0387ad53-c5cf-4ddc-8446-692aadcac1f5.js";
+        s.async = true;
+        (d.head || d.getElementsByTagName("head")[0]).appendChild(s);
+      })();
+    </script>
+    <!-- /SiteGPT -->
+  </body>
+</html>
