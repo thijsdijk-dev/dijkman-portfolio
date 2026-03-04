@@ -5,45 +5,39 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>dijkman.dev — Arcade</title>
   <style>
-    :root { color-scheme: dark; }
-    body { margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:#0b0b0c; color:#eaeaea; }
-    header { padding:18px 20px; border-bottom:1px solid #222; display:flex; gap:12px; flex-wrap:wrap; align-items:baseline; }
-    header h1 { margin:0; font-size:18px; }
-    header .meta { color:#a7a7a7; font-size:13px; }
-    main { padding:18px 20px; max-width:1100px; margin:0 auto; }
-    .frame { border:1px solid #222; border-radius:14px; overflow:hidden; background:#111; }
-    #game { width:100%; height:70vh; min-height:420px; }
-    .hint { margin-top:10px; color:#a7a7a7; font-size:13px; line-height:1.4; }
-    code { background:#151515; border:1px solid #222; padding:2px 6px; border-radius:8px; }
+    :root{color-scheme:dark;}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0b0b0c;color:#eaeaea}
+    header{padding:18px 20px;border-bottom:1px solid #222;display:flex;gap:12px;flex-wrap:wrap;align-items:baseline}
+    header h1{margin:0;font-size:18px}
+    header .meta{color:#a7a7a7;font-size:13px}
+    main{padding:18px 20px;max-width:1100px;margin:0 auto}
+    .frame{border:1px solid #222;border-radius:14px;overflow:hidden;background:#111}
+    #game{width:100%;height:70vh;min-height:420px}
+    .hint{margin-top:10px;color:#a7a7a7;font-size:13px;line-height:1.4}
+    code{background:#151515;border:1px solid #222;padding:2px 6px;border-radius:8px}
   </style>
 </head>
 <body>
-  <header>
-    <h1>Arcade</h1>
-    <div class="meta">EmulatorJS • 1 game autoload</div>
-  </header>
+<header>
+  <h1>Arcade</h1>
+  <div class="meta">EmulatorJS • autoload</div>
+</header>
 
-  <main>
-    <div class="frame"><div id="game"></div></div>
-    <div class="hint">
-      Game: <code>Gridlee</code> • Core: <code>arcade</code> • ROM: <code>roms/gridlee.zip</code><br/>
-      Let op: sommige browsers “pauzeren” tot je 1x klikt (user gesture) — dat is normaal.
-    </div>
-  </main>
+<main>
+  <div class="frame"><div id="game"></div></div>
+  <div class="hint">
+    Core: <code>snes</code> • ROM: <code>roms/SureInstinct.sfc</code>
+  </div>
+</main>
 
-  <script>
-    // EmulatorJS config (Arcade)
-    window.EJS_player = "#game";
-    window.EJS_core = "arcade";         // arcade core volgens EmulatorJS docs :contentReference[oaicite:3]{index=3}
-    window.EJS_gameUrl = "roms/gridlee.zip";
-    window.EJS_pathtodata = "data/";
+<script>
+  window.EJS_player = "#game";
+  window.EJS_core = "snes";
+  window.EJS_gameUrl = "roms/SureInstinct.sfc";
+  window.EJS_pathtodata = "data/";
+  window.EJS_startOnLoaded = true;
+</script>
 
-    // Autoload: start zodra assets geladen zijn
-    // (Browsers kunnen alsnog wachten op user interaction) :contentReference[oaicite:4]{index=4}
-    window.EJS_startOnLoaded = true;
-  </script>
-
-  <!-- Self-hosted loader -->
-  <script src="data/loader.js"></script>
+<script src="data/loader.js"></script>
 </body>
 </html>
