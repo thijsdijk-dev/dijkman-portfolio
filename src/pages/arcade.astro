@@ -2,9 +2,41 @@
 import Base from "../layouts/Base.astro";
 ---
 
-<Base title="Arcade" description="Arcade pagina wordt opnieuw opgebouwd.">
+<Base title="Arcade" description="Speel SureInstinct direct in de embedded SNES emulator.">
   <section class="card">
     <h1>Arcade</h1>
-    <p class="muted">Deze pagina is tijdelijk leeg en wordt opnieuw opgebouwd.</p>
+    <p class="muted">Deze pagina laadt de ingebedde SNES emulator met SureInstinct automatisch.</p>
+  </section>
+
+  <section class="card emulator-wrap">
+    <iframe
+      title="SureInstinct SNES emulator"
+      src="/retro/arcade.html"
+      loading="eager"
+      allow="autoplay; fullscreen; gamepad"
+      referrerpolicy="no-referrer"
+    ></iframe>
+  </section>
+
+  <section class="card">
+    <p class="muted">
+      Werkt de embed niet? Open dan direct
+      <a href="/retro/arcade.html">/retro/arcade.html</a>.
+    </p>
   </section>
 </Base>
+
+<style>
+  .emulator-wrap {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    min-height: 72vh;
+    border: 0;
+    background: #0b0b0c;
+  }
+</style>
